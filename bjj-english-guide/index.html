@@ -33,7 +33,11 @@ body{font-family:'Segoe UI','Hiragino Sans',sans-serif;background:var(--bg);colo
 .progress-badge{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.8rem;color:var(--text-muted);display:flex;align-items:center;gap:6px}
 .progress-badge .num{color:var(--green);font-weight:700}
 .container{max-width:1200px;margin:0 auto;padding:20px 24px;display:flex;gap:24px;min-height:calc(100vh - 80px)}
-.sidebar{width:260px;flex-shrink:0;position:sticky;top:96px;align-self:flex-start;max-height:calc(100vh - 116px);overflow-y:auto}
+.sidebar{width:260px;flex-shrink:0;position:sticky;top:96px;align-self:flex-start;max-height:calc(100vh - 116px);overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+.sidebar::-webkit-scrollbar{width:5px}
+.sidebar::-webkit-scrollbar-track{background:transparent}
+.sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+.sidebar::-webkit-scrollbar-thumb:hover{background:var(--text-dim)}
 .main{flex:1;min-width:0}
 .nav-list{display:flex;flex-direction:column;gap:4px}
 .nav-item{padding:10px 14px;border-radius:var(--radius);cursor:pointer;transition:.2s;border:1px solid transparent;display:flex;align-items:center;gap:10px;font-size:.88rem}
@@ -51,7 +55,7 @@ body{font-family:'Segoe UI','Hiragino Sans',sans-serif;background:var(--bg);colo
 .section-header .section-desc{color:var(--text-dim);font-size:.85rem;margin-top:8px;line-height:1.7}
 .item-illust{display:flex;justify-content:center;margin:12px 0;padding:14px;background:var(--surface);border-radius:10px;border:1px solid var(--border)}
 .item-illust svg{max-width:100%;max-height:220px;height:auto}
-.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px}
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px;align-items:start}
 .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;cursor:pointer;transition:.25s;position:relative;overflow:hidden}
 .card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:var(--shadow)}
 .card.revealed{border-color:var(--green)}
@@ -84,6 +88,29 @@ body{font-family:'Segoe UI','Hiragino Sans',sans-serif;background:var(--bg);colo
 .long-card .lc-jp-inner{background:var(--surface);border-radius:8px;padding:14px 16px;font-size:.85rem;color:var(--text-muted);line-height:1.7;border-left:3px solid var(--green);margin-top:8px}
 .long-card .lc-tap{font-size:.7rem;color:var(--text-dim);text-align:right;margin-top:8px}
 .long-card.revealed .lc-tap{opacity:0}
+.story-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:20px}
+.story-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:4px}
+.story-title{font-size:1.15rem;font-weight:700;color:var(--accent-light)}
+.story-desc{font-size:.85rem;color:var(--text-muted);margin:4px 0 14px}
+.story-play{background:var(--accent);border:none;color:#fff;padding:10px 22px;border-radius:24px;cursor:pointer;font-size:.9rem;font-weight:600;transition:.2s;flex-shrink:0}
+.story-play:hover{background:var(--accent-dark)}
+.story-play.playing{background:var(--green)}
+.story-lines{margin-top:8px}
+.story-line{display:flex;gap:10px;padding:8px 10px;border-radius:8px;cursor:pointer;transition:.2s;border-left:3px solid transparent;margin-bottom:2px;align-items:flex-start}
+.story-line:hover{background:var(--card-hover)}
+.story-line.now{background:var(--surface);border-left-color:var(--yellow)}
+.story-sp{flex-shrink:0;min-width:44px;padding:3px 8px;border-radius:6px;font-size:.7rem;font-weight:700;text-align:center;margin-top:2px}
+.story-sp.A{background:rgba(37,99,184,.3);color:var(--blue)}
+.story-sp.B{background:rgba(196,58,50,.3);color:var(--accent-light)}
+.story-sp.N{background:var(--border);color:var(--text-muted)}
+.story-sp.C{background:rgba(52,199,89,.25);color:var(--green)}
+.story-all-bar{display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap;align-items:center}
+.story-play.secondary{background:var(--card);border:1px solid var(--border);color:var(--text)}
+.story-play.secondary:hover{border-color:var(--accent);background:var(--card-hover)}
+.story-play.secondary.playing{background:var(--green);border-color:var(--green);color:#fff}
+.story-en{font-size:.9rem;color:var(--text);line-height:1.55}
+.story-jp{font-size:.78rem;color:var(--text-dim);line-height:1.55;margin-top:2px}
+.story-hint{font-size:.75rem;color:var(--text-dim);margin-bottom:16px}
 .search-bar{margin-bottom:20px}
 .search-bar input{width:100%;padding:12px 16px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:.9rem;outline:none;transition:.2s}
 .search-bar input:focus{border-color:var(--accent)}
@@ -246,22 +273,111 @@ IL['vocab_5']=`<svg viewBox="0 0 280 130" xmlns="http://www.w3.org/2000/svg">
 <path d="M50 70 L240 70" stroke="${Y}" stroke-width="1.5" stroke-dasharray="6" opacity=".4"/>
 <text x="140" y="128" fill="${BL}" font-size="9" text-anchor="middle" font-family="sans-serif">Repetition = Muscle Memory</text>
 </svg>`;
-IL['vocab_6']=`<svg viewBox="0 0 280 110" xmlns="http://www.w3.org/2000/svg">
-<rect x="20" y="20" width="90" height="70" rx="8" fill="none" stroke="${BL}" stroke-width="2"/>
-<text x="65" y="60" fill="${BL}" font-size="10" text-anchor="middle" font-family="sans-serif">Gym A</text>
-<rect x="170" y="20" width="90" height="70" rx="8" fill="none" stroke="${BL}" stroke-width="2"/>
-<text x="215" y="60" fill="${BL}" font-size="10" text-anchor="middle" font-family="sans-serif">Gym B</text>
-<circle cx="140" cy="45" r="12" fill="${R1}"/><path d="M140 57 L140 80 M140 80 L132 100 M140 80 L148 100" stroke="${R1}" stroke-width="8"${S}/>
-<path d="M115 55 L125 50 M155 50 L165 55" stroke="${R2}" stroke-width="2"${S}/>
-<path d="M120 48 L126 50 L120 52" fill="none" stroke="${R2}" stroke-width="1.5"/><path d="M160 48 L154 50 L160 52" fill="none" stroke="${R2}" stroke-width="1.5"/>
+IL['vocab_6']=`<svg viewBox="0 0 280 175" xmlns="http://www.w3.org/2000/svg">
+<path d="M88 35 L50 95" stroke="${BD}" stroke-width="20"${S}/>
+<path d="M192 35 L230 95" stroke="${BD}" stroke-width="20"${S}/>
+<path d="M95 20 L185 20 L197 42 L197 150 L83 150 L83 42 Z" fill="${BD}" opacity=".4" stroke="${BL}" stroke-width="2"/>
+<rect x="83" y="108" width="114" height="11" fill="#111"/>
+<path d="M118 20 L140 92 L140 150" stroke="${Y}" stroke-width="13"${S}/>
+<path d="M162 20 L140 92" stroke="${Y}" stroke-width="13"${S}/>
+<text x="232" y="40" fill="${Y}" font-size="10" font-family="sans-serif">Collar</text>
+<path d="M229 37 L166 28" stroke="${Y}" stroke-width="1" opacity=".6"/>
+<text x="232" y="135" fill="${Y}" font-size="10" font-family="sans-serif">Lapel</text>
+<path d="M229 131 L146 122" stroke="${Y}" stroke-width="1" opacity=".6"/>
 </svg>`;
-IL['vocab_7']=`<svg viewBox="0 0 280 150" xmlns="http://www.w3.org/2000/svg">
-${mat(280)}
-<circle cx="100" cy="55" r="16" fill="${B1}"/><path d="M100 71 L100 108 M82 85 L100 96 L122 78 M100 108 L88 148 M100 108 L112 148" stroke="${B1}" stroke-width="11"${S}/>
-<circle cx="180" cy="55" r="16" fill="${R1}"/><path d="M180 71 L180 108 M162 85 L180 96 L198 78 M180 108 L168 148 M180 108 L192 148" stroke="${R1}" stroke-width="11"${S}/>
-<path d="M122 78 L162 85" stroke="${Y}" stroke-width="3"/>
-<text x="140" y="30" fill="${R2}" font-size="14" text-anchor="middle" font-weight="700" font-family="sans-serif">PORRADA!</text>
-<path d="M60 25 L70 20 M65 30 L72 22 M220 25 L210 20 M215 30 L208 22" stroke="${Y}" stroke-width="2"${S}/>
+IL['vocab_7']=`<svg viewBox="0 0 280 175" xmlns="http://www.w3.org/2000/svg">
+<path d="M192 35 L230 95" stroke="${BD}" stroke-width="20"${S}/>
+<path d="M95 20 L185 20 L197 42 L197 150 L83 150 L83 42 Z" fill="${BD}" opacity=".4" stroke="${BL}" stroke-width="2"/>
+<path d="M118 20 L140 92 L140 150 M162 20 L140 92" stroke="${BL}" stroke-width="10"${S}/>
+<rect x="83" y="108" width="114" height="11" fill="#111"/>
+<path d="M88 35 L50 95" stroke="${Y}" stroke-width="20"${S}/>
+<circle cx="47" cy="100" r="15" fill="none" stroke="${R2}" stroke-width="2.5" stroke-dasharray="4"/>
+<text x="28" y="132" fill="${Y}" font-size="10" font-family="sans-serif">Sleeve（袖）</text>
+<text x="28" y="147" fill="${R2}" font-size="9" font-family="sans-serif">Cuff（袖口）</text>
+</svg>`;
+IL['vocab_8']=`<svg viewBox="0 0 280 175" xmlns="http://www.w3.org/2000/svg">
+<path d="M100 25 L180 25 L190 70 L172 158 L146 158 L140 85 L134 158 L108 158 L90 70 Z" fill="${BD}" opacity=".4" stroke="${BL}" stroke-width="2"/>
+<rect x="97" y="20" width="86" height="12" rx="4" fill="#111"/>
+<path d="M133 32 Q140 42 147 32" fill="none" stroke="#555" stroke-width="2"/>
+<rect x="106" y="136" width="32" height="24" fill="${Y}" opacity=".35" stroke="${Y}" stroke-width="2"/>
+<rect x="142" y="136" width="32" height="24" fill="${Y}" opacity=".35" stroke="${Y}" stroke-width="2"/>
+<text x="200" y="150" fill="${Y}" font-size="10" font-family="sans-serif">Pant Cuff（裾）</text>
+<path d="M197 146 L176 146" stroke="${Y}" stroke-width="1" opacity=".6"/>
+<text x="205" y="60" fill="${BL}" font-size="10" font-family="sans-serif">Pants</text>
+<path d="M202 56 L192 56" stroke="${BL}" stroke-width="1" opacity=".6"/>
+</svg>`;
+
+// --- rules (8) ---
+IL['rules_0']=`<svg viewBox="0 0 280 150" xmlns="http://www.w3.org/2000/svg">
+<text x="52" y="26" fill="${BL}" font-size="9" text-anchor="end" font-family="sans-serif">White</text><rect x="60" y="16" width="180" height="13" rx="3" fill="#e8e8ed"/><rect x="195" y="16" width="26" height="13" fill="#222"/>
+<text x="52" y="52" fill="${BL}" font-size="9" text-anchor="end" font-family="sans-serif">Blue</text><rect x="60" y="42" width="180" height="13" rx="3" fill="#2563b8"/><rect x="195" y="42" width="26" height="13" fill="#222"/>
+<text x="52" y="78" fill="${BL}" font-size="9" text-anchor="end" font-family="sans-serif">Purple</text><rect x="60" y="68" width="180" height="13" rx="3" fill="#7b3fa0"/><rect x="195" y="68" width="26" height="13" fill="#222"/>
+<text x="52" y="104" fill="${BL}" font-size="9" text-anchor="end" font-family="sans-serif">Brown</text><rect x="60" y="94" width="180" height="13" rx="3" fill="#5d4037"/><rect x="195" y="94" width="26" height="13" fill="#222"/>
+<text x="52" y="130" fill="${BL}" font-size="9" text-anchor="end" font-family="sans-serif">Black</text><rect x="60" y="120" width="180" height="13" rx="3" fill="#0a0a0a" stroke="#444" stroke-width="1"/><rect x="195" y="120" width="26" height="13" fill="${R1}"/>
+</svg>`;
+IL['rules_1']=`<svg viewBox="0 0 280 140" xmlns="http://www.w3.org/2000/svg">
+<line x1="10" y1="120" x2="200" y2="120" stroke="${MATL}" stroke-width="2" opacity=".3"/>
+<circle cx="80" cy="45" r="13" fill="${B1}"/><path d="M80 58 L105 80 M105 80 L100 118 M105 80 L125 100" stroke="${B1}" stroke-width="10"${S}/><path d="M92 65 L125 72" stroke="${B2}" stroke-width="8"${S}/>
+<circle cx="150" cy="40" r="13" fill="${R1}"/><path d="M150 53 L140 85 M140 85 L122 76 M140 85 L150 115" stroke="${R1}" stroke-width="10"${S}/>
+<path d="M162 55 Q177 70 167 85" fill="none" stroke="${Y}" stroke-width="2.5" stroke-dasharray="4"/><path d="M164 80 L167 87 L171 81" fill="none" stroke="${Y}" stroke-width="2"/>
+<text x="235" y="75" fill="${Y}" font-size="42" text-anchor="middle" font-weight="700" font-family="sans-serif">2</text>
+<text x="235" y="95" fill="${BL}" font-size="9" text-anchor="middle" font-family="sans-serif">POINTS</text>
+</svg>`;
+IL['rules_2']=`<svg viewBox="0 0 280 140" xmlns="http://www.w3.org/2000/svg">
+<line x1="10" y1="120" x2="200" y2="120" stroke="${MATL}" stroke-width="2" opacity=".3"/>
+<circle cx="45" cy="95" r="12" fill="${R1}"/><path d="M57 95 L120 95" stroke="${R1}" stroke-width="16"${S}/><path d="M120 95 L145 75 M120 95 L142 112" stroke="${R1}" stroke-width="9"${S}/>
+<circle cx="105" cy="40" r="13" fill="${B1}"/><path d="M105 53 L105 78" stroke="${B1}" stroke-width="12"${S}/><path d="M95 62 L105 70 L118 60" stroke="${B2}" stroke-width="8"${S}/><path d="M105 78 L92 108 M105 78 L120 105" stroke="${B1}" stroke-width="9"${S}/>
+<path d="M150 60 Q170 45 185 60" fill="none" stroke="${G}" stroke-width="2" stroke-dasharray="4"/><path d="M180 56 L186 60 L180 64" fill="none" stroke="${G}" stroke-width="2"/>
+<text x="235" y="75" fill="${Y}" font-size="42" text-anchor="middle" font-weight="700" font-family="sans-serif">3</text>
+<text x="235" y="95" fill="${BL}" font-size="9" text-anchor="middle" font-family="sans-serif">POINTS</text>
+</svg>`;
+IL['rules_3']=`<svg viewBox="0 0 280 140" xmlns="http://www.w3.org/2000/svg">
+<line x1="10" y1="120" x2="200" y2="120" stroke="${MATL}" stroke-width="2" opacity=".3"/>
+<circle cx="45" cy="100" r="12" fill="${B1}"/><path d="M57 100 L150 100" stroke="${B1}" stroke-width="18"${S}/><path d="M150 100 L170 112 M150 100 L170 88" stroke="${B1}" stroke-width="9"${S}/>
+<circle cx="100" cy="42" r="13" fill="${R1}"/><path d="M100 55 L100 85" stroke="${R1}" stroke-width="16"${S}/><path d="M88 65 L100 73 L112 65" stroke="${R2}" stroke-width="8"${S}/><path d="M100 85 L78 100 M100 85 L122 100" stroke="${R1}" stroke-width="10"${S}/>
+<text x="235" y="75" fill="${Y}" font-size="42" text-anchor="middle" font-weight="700" font-family="sans-serif">4</text>
+<text x="235" y="95" fill="${BL}" font-size="9" text-anchor="middle" font-family="sans-serif">POINTS</text>
+</svg>`;
+IL['rules_4']=`<svg viewBox="0 0 280 130" xmlns="http://www.w3.org/2000/svg">
+<rect x="30" y="15" width="220" height="80" rx="8" fill="#111" stroke="${BL}" stroke-width="2"/>
+<line x1="140" y1="15" x2="140" y2="95" stroke="${BL}" stroke-width="1" opacity=".5"/>
+<rect x="42" y="25" width="40" height="26" rx="4" fill="${B1}"/><rect x="198" y="25" width="40" height="26" rx="4" fill="${R1}"/>
+<text x="62" y="44" fill="#fff" font-size="16" text-anchor="middle" font-weight="700" font-family="sans-serif">6</text>
+<text x="218" y="44" fill="#fff" font-size="16" text-anchor="middle" font-weight="700" font-family="sans-serif">6</text>
+<text x="62" y="70" fill="${G}" font-size="9" text-anchor="middle" font-family="sans-serif">ADV 1</text>
+<text x="62" y="85" fill="${R2}" font-size="9" text-anchor="middle" font-family="sans-serif">PEN 0</text>
+<text x="218" y="70" fill="${G}" font-size="9" text-anchor="middle" font-family="sans-serif">ADV 0</text>
+<text x="218" y="85" fill="${R2}" font-size="9" text-anchor="middle" font-family="sans-serif">PEN 1</text>
+<text x="140" y="115" fill="${BL}" font-size="9" text-anchor="middle" font-family="sans-serif">同点時はアドバンテージ差で勝敗決定</text>
+</svg>`;
+IL['rules_5']=`<svg viewBox="0 0 280 120" xmlns="http://www.w3.org/2000/svg">
+<line x1="30" y1="95" x2="250" y2="95" stroke="${MATL}" stroke-width="3" opacity=".4"/>
+<path d="M80 30 L110 70" stroke="${BD}" stroke-width="14"${S}/>
+<path d="M110 70 L118 88 M118 88 L112 93 M118 88 L120 95 M118 88 L126 93 M118 88 L130 88" stroke="${BD}" stroke-width="6"${S}/>
+<path d="M142 60 Q152 75 142 88 M157 55 Q170 72 157 90" fill="none" stroke="${Y}" stroke-width="2.5" opacity=".7"/>
+<text x="210" y="55" fill="${Y}" font-size="15" font-weight="700" text-anchor="middle" font-family="sans-serif">TAP! TAP!</text>
+<text x="210" y="75" fill="${BL}" font-size="9" text-anchor="middle" font-family="sans-serif">2回以上叩く / 口頭でもOK</text>
+</svg>`;
+IL['rules_6']=`<svg viewBox="0 0 280 155" xmlns="http://www.w3.org/2000/svg">
+<line x1="70" y1="122" x2="180" y2="122" stroke="${MATL}" stroke-width="2" opacity=".4"/>
+<circle cx="120" cy="72" r="11" fill="${B1}"/><path d="M120 83 L120 105 M120 105 L110 122 M120 105 L130 122 M112 88 L102 58 M128 88 L138 58" stroke="${B1}" stroke-width="8"${S}/>
+<path d="M95 50 L155 50" stroke="${R1}" stroke-width="12"${S}/><circle cx="168" cy="50" r="10" fill="${R1}"/>
+<circle cx="128" cy="80" r="64" fill="none" stroke="${R1}" stroke-width="5" opacity=".9"/>
+<line x1="83" y1="35" x2="173" y2="125" stroke="${R1}" stroke-width="5" stroke-linecap="round"/>
+<text x="128" y="152" fill="${R2}" font-size="10" text-anchor="middle" font-family="sans-serif">スラムは全帯で反則</text>
+</svg>`;
+IL['rules_7']=`<svg viewBox="0 0 300 130" xmlns="http://www.w3.org/2000/svg">
+<circle cx="28" cy="24" r="7" fill="#e8e8ed"/><circle cx="46" cy="24" r="7" fill="#2563b8"/><circle cx="64" cy="24" r="7" fill="#7b3fa0"/>
+<text x="80" y="28" fill="#8b8fa3" font-size="10" font-family="sans-serif">ストレートアンクルのみ</text>
+<text x="272" y="29" fill="${G}" font-size="14" text-anchor="middle" font-family="sans-serif">&#10004;</text>
+<line x1="20" y1="42" x2="285" y2="42" stroke="${BL}" stroke-width="1" opacity=".3"/>
+<circle cx="28" cy="60" r="7" fill="#5d4037"/><circle cx="46" cy="60" r="7" fill="#0a0a0a" stroke="#555" stroke-width="1"/>
+<text x="62" y="64" fill="#8b8fa3" font-size="10" font-family="sans-serif">ニーバー / トーホールド</text>
+<text x="272" y="65" fill="${G}" font-size="14" text-anchor="middle" font-family="sans-serif">&#10004;</text>
+<line x1="20" y1="78" x2="285" y2="78" stroke="${BL}" stroke-width="1" opacity=".3"/>
+<text x="20" y="100" fill="${R2}" font-size="10" font-family="sans-serif">ヒールフック（Gi試合では全帯禁止）</text>
+<text x="272" y="101" fill="${R2}" font-size="14" text-anchor="middle" font-family="sans-serif">&#10008;</text>
+<text x="20" y="122" fill="${BL}" font-size="8" font-family="sans-serif">※No-Giは茶・黒帯でヒールフック解禁（IBJJF）</text>
 </svg>`;
 
 // --- greetings (7) ---
@@ -297,27 +413,101 @@ IL['greetings_3']=`<svg viewBox="0 0 240 110" xmlns="http://www.w3.org/2000/svg"
 <path d="M35 55 L55 55 M155 55 L225 55" stroke="${Y}" stroke-width="2" stroke-dasharray="4" opacity=".5"/>
 </svg>`;
 IL['greetings_4']=`<svg viewBox="0 0 260 130" xmlns="http://www.w3.org/2000/svg">
-<rect x="40" y="90" width="180" height="30" rx="4" fill="${MAT}" opacity=".5" stroke="${MATL}" stroke-width="1.5"/>
-<circle cx="130" cy="40" r="14" fill="${B1}"/><path d="M130 54 L130 80" stroke="${B1}" stroke-width="10"${S}/>
-<path d="M130 52 Q118 42 122 56" stroke="${B1}" stroke-width="4"${S}/>
-<path d="M130 80 L120 95 M130 80 L140 95" stroke="${B1}" stroke-width="9"${S}/>
-<line x1="40" y1="90" x2="220" y2="90" stroke="${MATL}" stroke-width="2" opacity=".4"/>
-<text x="130" y="120" fill="${G}" font-size="9" text-anchor="middle" font-family="sans-serif">Bow at the mat edge</text>
+<rect x="40" y="20" width="80" height="90" rx="8" fill="none" stroke="${BL}" stroke-width="2.5"/>
+<circle cx="80" cy="70" r="26" fill="none" stroke="${B2}" stroke-width="2.5"/>
+<path d="M60 70 Q70 60 80 70 Q90 80 100 70" fill="none" stroke="${B2}" stroke-width="2"/>
+<circle cx="52" cy="30" r="3" fill="${BL}"/><circle cx="62" cy="30" r="3" fill="${BL}"/>
+<path d="M160 40 L200 40 L207 55 L207 105 L153 105 L153 55 Z" fill="${BD}" opacity=".4" stroke="${BL}" stroke-width="2"/>
+<path d="M170 40 L180 70 M190 40 L180 70" stroke="${BL}" stroke-width="5"${S}/>
+<path d="M222 32 L227 42 M233 27 L236 37 M219 52 L226 55" stroke="${Y}" stroke-width="2" stroke-linecap="round"/>
+<text x="130" y="125" fill="${G}" font-size="9" text-anchor="middle" font-family="sans-serif">道着は毎回洗濯！臭う道着はNG</text>
 </svg>`;
-IL['greetings_5']=`<svg viewBox="0 0 260 110" xmlns="http://www.w3.org/2000/svg">
-<rect x="30" y="55" width="90" height="40" rx="4" fill="${MAT}" opacity=".4" stroke="${MATL}" stroke-width="1.5"/>
-<text x="75" y="80" fill="${MATL}" font-size="9" text-anchor="middle" font-family="sans-serif">MAT</text>
-<path d="M150 70 L150 95 Q150 100 155 100 L175 100 Q180 100 180 95 L180 70 Q180 60 165 55 Q150 60 150 70 Z" fill="none" stroke="${B2}" stroke-width="2"/>
-<text x="165" y="85" fill="${B2}" font-size="8" text-anchor="middle" font-family="sans-serif">Sandals</text>
-<path d="M125 75 L145 75" stroke="${Y}" stroke-width="2" stroke-dasharray="3"/>
-<circle cx="195" cy="80" r="4" fill="${R1}"/><line x1="195" y1="76" x2="195" y2="66" stroke="${R1}" stroke-width="2"/><text x="210" y="78" fill="${R1}" font-size="8" font-family="sans-serif">Prevent infection</text>
+IL['greetings_5']=`<svg viewBox="0 0 240 120" xmlns="http://www.w3.org/2000/svg">
+<path d="M60 75 L60 45 Q60 30 75 30 L90 30 M90 30 L95 25 M90 30 L100 27 M90 30 L98 33 M90 30 L92 37 M90 30 L85 23" stroke="${BD}" stroke-width="5"${S}/>
+<path d="M80 33 L88 25 M85 35 L95 29" stroke="${G}" stroke-width="2" stroke-linecap="round"/>
+<circle cx="175" cy="48" r="14" fill="none" stroke="${Y}" stroke-width="4"/>
+<circle cx="175" cy="30" r="5" fill="none" stroke="${Y}" stroke-width="2"/>
+<line x1="153" y1="28" x2="197" y2="70" stroke="${R1}" stroke-width="4" stroke-linecap="round"/>
+<text x="75" y="105" fill="${G}" font-size="9" text-anchor="middle" font-family="sans-serif">爪は短く</text>
+<text x="175" y="105" fill="${R2}" font-size="9" text-anchor="middle" font-family="sans-serif">アクセサリーは外す</text>
 </svg>`;
-IL['greetings_6']=`<svg viewBox="0 0 240 110" xmlns="http://www.w3.org/2000/svg">
-<path d="M80 70 L80 40 Q80 25 95 25 L110 25 M110 25 L115 20 M110 25 L120 22 M110 25 L118 28 M110 25 L112 32 M110 25 L105 18" stroke="${BD}" stroke-width="5"${S}/>
-<path d="M95 25 Q85 20 90 30" stroke="${BD}" stroke-width="4"${S}/>
-<path d="M160 70 L160 40 Q160 25 145 25 L130 25 M130 25 L125 21 M130 25 L128 31" stroke="${BD}" stroke-width="5"${S}/>
-<path d="M100 28 L108 20 M105 30 L115 24" stroke="${G}" stroke-width="2" stroke-linecap="round"/>
-<text x="120" y="95" fill="${G}" font-size="9" text-anchor="middle" font-family="sans-serif">Trim nails short</text>
+IL['greetings_6']=`<svg viewBox="0 0 260 135" xmlns="http://www.w3.org/2000/svg">
+<circle cx="85" cy="35" r="17" fill="${B1}"/><path d="M85 52 L85 90 M68 65 L85 76 L102 65 M85 90 L73 122 M85 90 L97 122" stroke="${B1}" stroke-width="13"${S}/>
+<circle cx="180" cy="50" r="11" fill="${R1}"/><path d="M180 61 L180 90 M170 70 L180 78 L190 70 M180 90 L172 120 M180 90 L188 120" stroke="${R1}" stroke-width="7"${S}/>
+<path d="M112 72 L158 72" stroke="${Y}" stroke-width="2" stroke-dasharray="4"/>
+<text x="85" y="12" fill="${B2}" font-size="9" text-anchor="middle" font-family="sans-serif">90kg</text>
+<text x="180" y="28" fill="${R2}" font-size="9" text-anchor="middle" font-family="sans-serif">55kg</text>
+<text x="135" y="62" fill="${Y}" font-size="9" text-anchor="middle" font-family="sans-serif">力と体重は封印</text>
+</svg>`;
+IL['greetings_7']=`<svg viewBox="0 0 260 125" xmlns="http://www.w3.org/2000/svg">
+<rect x="90" y="80" width="150" height="30" rx="4" fill="${MAT}" opacity=".4" stroke="${MATL}" stroke-width="1.5"/>
+<circle cx="135" cy="48" r="10" fill="${BD}"/><path d="M135 58 L135 77 M135 62 Q125 68 129 76" stroke="${BD}" stroke-width="7"${S}/>
+<circle cx="180" cy="48" r="10" fill="${BD}"/><path d="M180 58 L180 77 M180 62 Q170 68 174 76" stroke="${BD}" stroke-width="7"${S}/>
+<circle cx="222" cy="50" r="10" fill="${BD}"/><path d="M222 60 L222 78" stroke="${BD}" stroke-width="7"${S}/>
+<circle cx="40" cy="52" r="12" fill="${B1}"/><path d="M40 64 L40 98" stroke="${B1}" stroke-width="9"${S}/>
+<path d="M55 50 L115 46 M55 56 L165 52" stroke="${Y}" stroke-width="1.5" stroke-dasharray="3" opacity=".7"/>
+<text x="40" y="118" fill="${B2}" font-size="8" text-anchor="middle" font-family="sans-serif">まず観察</text>
+<text x="178" y="24" fill="${BL}" font-size="8" text-anchor="middle" font-family="sans-serif">現地の流儀に合わせる</text>
+</svg>`;
+
+// --- dropin (8) ---
+IL['dropin_0']=`<svg viewBox="0 0 260 110" xmlns="http://www.w3.org/2000/svg">
+<rect x="30" y="30" width="90" height="60" rx="6" fill="none" stroke="${B2}" stroke-width="2.5"/>
+<path d="M30 35 L75 65 L120 35" fill="none" stroke="${B2}" stroke-width="2.5"/>
+<rect x="145" y="20" width="85" height="30" rx="10" fill="none" stroke="${BL}" stroke-width="1.5"/>
+<text x="187" y="39" fill="${BL}" font-size="9" text-anchor="middle" font-family="sans-serif">Drop-in OK?</text>
+<rect x="155" y="60" width="75" height="26" rx="10" fill="none" stroke="${G}" stroke-width="1.5"/>
+<text x="192" y="77" fill="${G}" font-size="9" text-anchor="middle" font-family="sans-serif">Sure! Welcome</text>
+</svg>`;
+IL['dropin_1']=`<svg viewBox="0 0 260 110" xmlns="http://www.w3.org/2000/svg">
+<rect x="45" y="30" width="75" height="48" rx="6" fill="none" stroke="${Y}" stroke-width="2.5"/>
+<line x1="45" y1="44" x2="120" y2="44" stroke="${Y}" stroke-width="6"/>
+<rect x="53" y="58" width="30" height="8" rx="2" fill="${Y}" opacity=".5"/>
+<text x="185" y="55" fill="${G}" font-size="22" text-anchor="middle" font-weight="700" font-family="sans-serif">$20</text>
+<text x="185" y="75" fill="${BL}" font-size="9" text-anchor="middle" font-family="sans-serif">Mat Fee / Card OK</text>
+</svg>`;
+IL['dropin_2']=`<svg viewBox="0 0 260 110" xmlns="http://www.w3.org/2000/svg">
+<circle cx="75" cy="55" r="32" fill="none" stroke="${B2}" stroke-width="2.5"/>
+<path d="M75 35 L75 55 L90 63" fill="none" stroke="${B2}" stroke-width="3"${S}/>
+<rect x="140" y="26" width="90" height="58" rx="6" fill="none" stroke="${BL}" stroke-width="2"/>
+<line x1="140" y1="40" x2="230" y2="40" stroke="${BL}" stroke-width="2"/>
+<text x="185" y="58" fill="${BL}" font-size="8" text-anchor="middle" font-family="sans-serif">MON 19:00 Gi</text>
+<text x="185" y="74" fill="${R2}" font-size="8" text-anchor="middle" font-family="sans-serif">FRI 19:00 No-Gi</text>
+</svg>`;
+IL['dropin_3']=`<svg viewBox="0 0 260 120" xmlns="http://www.w3.org/2000/svg">
+<path d="M40 30 L80 30 L88 45 L88 95 L32 95 L32 45 Z" fill="#e8e8ed" opacity=".85" stroke="${BL}" stroke-width="1.5"/>
+<path d="M105 30 L145 30 L153 45 L153 95 L97 95 L97 45 Z" fill="#2563b8" opacity=".8" stroke="${BL}" stroke-width="1.5"/>
+<path d="M170 30 L210 30 L218 45 L218 95 L162 95 L162 45 Z" fill="#111" stroke="${BL}" stroke-width="1.5"/>
+<text x="125" y="112" fill="${BL}" font-size="9" text-anchor="middle" font-family="sans-serif">White / Blue / Black — 色規定を確認</text>
+</svg>`;
+IL['dropin_4']=`<svg viewBox="0 0 260 120" xmlns="http://www.w3.org/2000/svg">
+<path d="M130 14 L130 22 M110 30 Q130 12 150 30" fill="none" stroke="${BL}" stroke-width="3"${S}/>
+<path d="M105 35 L155 35 L163 50 L163 100 L97 100 L97 50 Z" fill="${BD}" opacity=".4" stroke="${BL}" stroke-width="2"/>
+<rect x="172" y="45" width="56" height="26" rx="4" fill="none" stroke="${Y}" stroke-width="2" transform="rotate(8 200 58)"/>
+<text x="200" y="62" fill="${Y}" font-size="9" text-anchor="middle" font-family="sans-serif" transform="rotate(8 200 58)">RENTAL</text>
+</svg>`;
+IL['dropin_5']=`<svg viewBox="0 0 260 110" xmlns="http://www.w3.org/2000/svg">
+<rect x="40" y="45" width="120" height="14" rx="4" fill="#2563b8"/>
+<rect x="130" y="45" width="30" height="14" fill="#222"/>
+<text x="100" y="35" fill="${B2}" font-size="9" text-anchor="middle" font-family="sans-serif">Blue Belt / 3 years</text>
+<path d="M190 55 L200 65 L220 40" fill="none" stroke="${G}" stroke-width="4"${S}/>
+<text x="205" y="90" fill="${G}" font-size="9" text-anchor="middle" font-family="sans-serif">All levels OK</text>
+</svg>`;
+IL['dropin_6']=`<svg viewBox="0 0 260 120" xmlns="http://www.w3.org/2000/svg">
+<circle cx="80" cy="55" r="30" fill="none" stroke="${R2}" stroke-width="3"/>
+<circle cx="80" cy="55" r="22" fill="none" stroke="${R2}" stroke-width="1.5" opacity=".5"/>
+<text x="80" y="60" fill="${R2}" font-size="10" text-anchor="middle" font-weight="700" font-family="sans-serif">TEAM</text>
+<rect x="150" y="30" width="70" height="55" rx="8" fill="none" stroke="${B2}" stroke-width="2.5"/>
+<path d="M160 30 L155 40 M210 30 L215 40" stroke="${B2}" stroke-width="2"/>
+<text x="185" y="105" fill="${BL}" font-size="9" text-anchor="middle" font-family="sans-serif">Patch &amp; Rashguard</text>
+</svg>`;
+IL['dropin_7']=`<svg viewBox="0 0 260 115" xmlns="http://www.w3.org/2000/svg">
+<circle cx="60" cy="40" r="13" fill="${B1}"/><path d="M60 53 L60 85 M48 62 L60 70 L78 58" stroke="${B1}" stroke-width="9"${S}/>
+<circle cx="130" cy="40" r="13" fill="${R1}"/><path d="M130 53 L130 85 M142 62 L130 70 L112 58" stroke="${R1}" stroke-width="9"${S}/>
+<rect x="170" y="28" width="60" height="46" rx="10" fill="none" stroke="${Y}" stroke-width="2"/>
+<circle cx="200" cy="51" r="11" fill="none" stroke="${Y}" stroke-width="2"/>
+<circle cx="217" cy="38" r="2.5" fill="${Y}"/>
+<text x="200" y="95" fill="${Y}" font-size="8" text-anchor="middle" font-family="sans-serif">Tag on Instagram!</text>
 </svg>`;
 
 // --- injuries (4) ---
@@ -538,7 +728,7 @@ IL['biomech_10']=`<svg viewBox="0 0 280 120" xmlns="http://www.w3.org/2000/svg">
 IL['sparring_0']=`<svg viewBox="0 0 260 110" xmlns="http://www.w3.org/2000/svg"><circle cx="80" cy="30" r="13" fill="${B1}"/><path d="M80 43 L80 72 M67 55 L80 62 L95 52 M80 72 L70 98 M80 72 L90 98" stroke="${B1}" stroke-width="9"${S}/><circle cx="180" cy="30" r="13" fill="${R1}"/><path d="M180 43 L180 72 M167 55 L180 62 L193 52 M180 72 L170 98 M180 72 L190 98" stroke="${R1}" stroke-width="9"${S}/><path d="M95 52 L167 55" stroke="${Y}" stroke-width="3" stroke-dasharray="4"/><text x="130" y="46" fill="${Y}" font-size="11" text-anchor="middle" font-family="sans-serif">&#129309;</text><text x="130" y="108" fill="${BL}" font-size="9" text-anchor="middle" font-family="sans-serif">Slap bump &amp; roll!</text></svg>`;
 IL['sparring_1']=`<svg viewBox="0 0 240 80" xmlns="http://www.w3.org/2000/svg"><rect x="20" y="15" width="200" height="30" rx="8" fill="none" stroke="${BL}" stroke-width="2"/><rect x="20" y="15" width="140" height="30" rx="8" fill="${G}" opacity=".15"/><text x="90" y="35" fill="${G}" font-size="11" text-anchor="middle" font-weight="600" font-family="sans-serif">70%</text><text x="190" y="35" fill="${BL}" font-size="9" text-anchor="middle" font-family="sans-serif">100%</text><text x="120" y="65" fill="${BL}" font-size="9" text-anchor="middle" font-family="sans-serif">"Let's go light"</text></svg>`;
 IL['sparring_2']=`<svg viewBox="0 0 260 100" xmlns="http://www.w3.org/2000/svg"><circle cx="80" cy="30" r="12" fill="${B1}"/><path d="M80 42 L80 65 M68 52 L80 58 L92 52 M80 65 L72 88 M80 65 L88 88" stroke="${B1}" stroke-width="8"${S}/><circle cx="180" cy="30" r="12" fill="${R1}"/><path d="M180 42 L180 65 M168 52 L180 58 L192 52 M180 65 L172 88 M180 65 L188 88" stroke="${R1}" stroke-width="8"${S}/><path d="M95 45 Q130 25 165 45 Q130 65 95 45" fill="none" stroke="${G}" stroke-width="2" stroke-dasharray="4"/><text x="130" y="48" fill="${G}" font-size="9" text-anchor="middle" font-family="sans-serif">Flow</text></svg>`;
-IL['sparring_3']=`<svg viewBox="0 0 260 100" xmlns="http://www.w3.org/2000/svg"><circle cx="80" cy="30" r="13" fill="${B1}"/><path d="M80 43 L80 68 M66 54 L80 62 L100 48 M80 68 L70 92 M80 68 L90 92" stroke="${B1}" stroke-width="10"${S}/><circle cx="180" cy="30" r="13" fill="${R1}"/><path d="M180 43 L180 68 M166 54 L180 62 L194 48 M180 68 L170 92 M180 68 L190 92" stroke="${R1}" stroke-width="10"${S}/><path d="M100 48 L166 54" stroke="${Y}" stroke-width="3"/><path d="M55 18 L65 22 M58 28 L66 25 M205 18 L195 22 M202 28 L194 25" stroke="${R2}" stroke-width="2.5" stroke-linecap="round"/><text x="130" y="98" fill="${R2}" font-size="10" text-anchor="middle" font-weight="700" font-family="sans-serif">100% PORRADA</text></svg>`;
+IL['sparring_3']=`<svg viewBox="0 0 260 100" xmlns="http://www.w3.org/2000/svg"><circle cx="80" cy="30" r="13" fill="${B1}"/><path d="M80 43 L80 68 M66 54 L80 62 L100 48 M80 68 L70 92 M80 68 L90 92" stroke="${B1}" stroke-width="10"${S}/><circle cx="180" cy="30" r="13" fill="${R1}"/><path d="M180 43 L180 68 M166 54 L180 62 L194 48 M180 68 L170 92 M180 68 L190 92" stroke="${R1}" stroke-width="10"${S}/><path d="M100 48 L166 54" stroke="${Y}" stroke-width="3"/><path d="M55 18 L65 22 M58 28 L66 25 M205 18 L195 22 M202 28 L194 25" stroke="${R2}" stroke-width="2.5" stroke-linecap="round"/><text x="130" y="98" fill="${R2}" font-size="10" text-anchor="middle" font-weight="700" font-family="sans-serif">100% GO HARD</text></svg>`;
 IL['sparring_4']=`<svg viewBox="0 0 250 90" xmlns="http://www.w3.org/2000/svg"><circle cx="80" cy="30" r="12" fill="${B1}"/><path d="M80 42 L80 60 M80 60 L72 80 M80 60 L88 80" stroke="${B1}" stroke-width="8"${S}/><path d="M92 48 L105 42" stroke="${B2}" stroke-width="7"${S}/><path d="M105 38 L108 42 L112 38" fill="none" stroke="${G}" stroke-width="3" stroke-linecap="round"/><text x="140" y="35" fill="${G}" font-size="10" font-family="sans-serif">Tap = Learning</text><text x="140" y="52" fill="${BL}" font-size="9" font-family="sans-serif">No ego on the mat</text></svg>`;
 IL['sparring_5']=`<svg viewBox="0 0 260 90" xmlns="http://www.w3.org/2000/svg"><path d="M60 25 L90 45 L60 55" fill="none" stroke="${B2}" stroke-width="8"${S}/><path d="M100 40 L130 40" stroke="${Y}" stroke-width="2" stroke-dasharray="3"/><text x="130" y="32" fill="${Y}" font-size="8" text-anchor="middle" font-family="sans-serif">S L O W</text><path d="M160 25 L190 45 L160 55" fill="none" stroke="${R2}" stroke-width="8"${S}/><path d="M205 38 L210 45 L215 38" fill="none" stroke="${G}" stroke-width="3" stroke-linecap="round"/><text x="130" y="78" fill="${BL}" font-size="9" text-anchor="middle" font-family="sans-serif">Give time to tap</text></svg>`;
 IL['sparring_6']=`<svg viewBox="0 0 240 90" xmlns="http://www.w3.org/2000/svg"><path d="M80 20 L80 60 Q80 70 85 70 L90 65 M90 20 L90 60 Q90 68 93 68 L95 64 M100 20 L100 60 Q100 70 105 68" stroke="${BD}" stroke-width="5"${S}/><path d="M110 20 L110 55" stroke="${R1}" stroke-width="5" stroke-linecap="round" stroke-dasharray="3"/><text x="95" y="85" fill="${R2}" font-size="9" text-anchor="middle" font-family="sans-serif">3+ fingers only</text><text x="180" y="45" fill="${R2}" font-size="20" font-family="sans-serif">&#10008;</text><text x="195" y="50" fill="${R2}" font-size="9" font-family="sans-serif">1-2 fingers</text></svg>`;
@@ -565,16 +755,36 @@ const DATA = [
     {term:'Professor / Coach',meaning:'先生、インストラクター',detail:'黒帯の指導者をProfessor、それ以下の帯の指導者をCoachと呼ぶことが一般的。'},
     {term:'Roll / Rolling',meaning:'スパーリング',detail:'BJJにおける実戦形式の練習。単なる「Fight」ではなく、技術を試し合う流動的なプロセスを指す。'},
     {term:'Drill',meaning:'打ち込み、反復練習',detail:'筋肉の記憶（マッスルメモリー）を構築するために、特定の技術を何度も反復する練習プロセス。'},
-    {term:'Creonte',meaning:'裏切り者',detail:'カーウソン・グレイシーがギリシャ神話にちなんで名付けた古いスラング。道場を頻繁に移籍する者を指す。'},
-    {term:'Porrada',meaning:'激しい練習、全力でのスパー',detail:'ポルトガル語で「殴り合い」を意味するが、BJJでは全力を尽くしてハードに練習する姿勢を指す。'}]},
-  {id:'greetings',title:'挨拶・エチケット',subtitle:'Greetings & Etiquette',desc:'ゲストが道場に到着した際の初期対応。歓迎、施設案内、衛生管理に関する表現。',type:'phrase',items:[
+    {term:'Collar / Lapel',meaning:'衿（えり）/ ラペル（下衿）',detail:'道着の衿。クロスカラーチョークなど絞め技やグリップの基本となる部位。Lapelは衿の下部の垂れた部分で、ラペルガードなど現代柔術の重要な武器。"Grab the collar（衿を掴んで）"は最頻出の指示。'},
+    {term:'Sleeve / Cuff',meaning:'袖 / 袖口',detail:'スパイダーガードや各種グリップコントロールの基本。袖口はCuff。"Grip the sleeve at the cuff（袖口の位置で袖を掴む）"のように使われる。'},
+    {term:'Pants / Pant Cuff',meaning:'ズボン / 裾（すそ）',detail:'裾（Pant cuff）はズボンの足首側の端。デラヒーバガードやトレアンドパスでのグリップの要。"Grip the pants at the knee（膝の位置でズボンを掴む）"も頻出。なお上着の帯から下の垂れ部分はSkirt（スカート）と呼ぶ。'}]},
+  {id:'rules',title:'ルール基礎',subtitle:'Competition Rules Basics',desc:'IBJJFルールを基準とした試合の基本。ポイントシステムと帯別の禁止技をざっくり押さえる。道場によりローカルルールがある場合は先生に確認を。',type:'term',items:[
+    {term:'Belt Ranks',meaning:'帯の階級',detail:'大人は 白 → 青 → 紫 → 茶 → 黒 の5段階。各帯には最大4本のストライプ（黒い帯先の白線）が付く。青帯には16歳以上の年齢制限がある。'},
+    {term:'Takedown / Sweep = 2 pts',meaning:'テイクダウン / スイープ = 2点',detail:'相手を倒して上を取る（テイクダウン）、またはガードから相手をひっくり返して上になる（スイープ）と2点。ニーオンベリーも2点。3秒間の維持が必要。'},
+    {term:'Guard Pass = 3 pts',meaning:'パスガード = 3点',detail:'相手のガード（脚による防御）を通過してサイドコントロール等を確保すると3点。'},
+    {term:'Mount / Back = 4 pts',meaning:'マウント / バックコントロール = 4点',detail:'マウント、バックマウント、両フック付きバックコントロールの確保は最高の4点。'},
+    {term:'Advantage / Penalty',meaning:'アドバンテージ / ペナルティ',detail:'ポイントに至らなかった惜しい攻め（サブミッションを仕掛けた等）はアドバンテージ。消極的な試合運び（ストーリング）にはペナルティ。同点時の勝敗判定に使われる。'},
+    {term:'Submission Victory',meaning:'一本勝ち（サブミッション）',detail:'相手がタップ（手や足で2回以上叩く、または口頭で「Tap」と言う）すれば、ポイントに関係なく即勝利。'},
+    {term:'Illegal: Slam / Spinal Lock',meaning:'反則：スラム / 脊椎への極め',detail:'相手を持ち上げて叩きつけるスラムは全帯で反則。チョークを伴わないネッククランク等の脊椎攻撃、シザーテイクダウンも禁止。'},
+    {term:'Leg Locks by Belt',meaning:'帯別の足関節ルール',detail:'Gi試合では白〜紫帯はストレートアンクルロックのみ合法。ニーバー・トーホールドは茶帯以上。ヒールフックはGiでは全帯禁止（No-Giは茶・黒帯のみ解禁）。膝を内側に捻る「ニーリーピング」も下の帯では反則になるので注意。'}]},
+  {id:'greetings',title:'挨拶・エチケット',subtitle:'Greetings & Etiquette',desc:'ゲスト対応と、世界共通で言われる道場エチケット。細かい作法はジムごとに違うので、迷ったら周りをよく観察して合わせるのが鉄則。',type:'phrase',items:[
     {term:'歓迎と確認',en:'"Welcome to our academy. Are you dropping in for today\'s class?"',meaning:'アカデミーへの歓迎の意を示し、本日のクラスへのドロップイン（出稽古）であるかを確認する。'},
     {term:'経歴の確認',en:'"Where do you usually train, and what belt are you?"',meaning:'相手の所属と帯色を確認し、スパーリングのペアリングや指導のレベルを調整する。'},
     {term:'事務手続き',en:'"Please sign the waiver here."',meaning:'免責同意書（Waiver）への署名を促す。法的なリスク管理として必須の表現。'},
     {term:'施設案内',en:'"The changing room and restrooms are over there."',meaning:'更衣室とトイレの場所を案内する。'},
-    {term:'エチケット',en:'"Please bow before stepping on or off the mat."',meaning:'マットへの出入り時にお辞儀をするという、BJJの伝統的な敬意の作法を伝える。'},
-    {term:'衛生管理',en:'"Please wear footwear when off the mats to prevent infections."',meaning:'感染症予防のため、マット外での履物着用を義務付ける。'},
-    {term:'身だしなみ',en:'"Make sure your finger and toe nails are trimmed short."',meaning:'爪が長いと相手を傷つけるため、短く切るよう促す。安全管理の基本。'}]},
+    {term:'衛生管理（道着と体臭）',en:'"Please make sure your gi is freshly washed. A smelly gi is a big no-no."',meaning:'道着（帯も）は毎回洗濯し、体臭・汗臭さにも気を配るのが世界共通のマナー。臭う道着は最も嫌われるNG行為のひとつ。'},
+    {term:'身だしなみ',en:'"Make sure your nails are trimmed short, and take off all jewelry before class."',meaning:'手足の爪は短く切り、指輪・ネックレス・ピアス等のアクセサリーは外す。相手を傷つけないための安全管理の基本。'},
+    {term:'体格差・女性への配慮',en:'"When rolling with women or much lighter partners, don\'t just use your weight and strength. Let them work."',meaning:'女性や自分よりはるかに軽い相手とのスパーでは、体重と力で潰さず、ペースを合わせて技を出させる余地を作るのが暗黙のマナー。'},
+    {term:'現地の習慣に従う',en:'"Just follow what the locals do. Some gyms bow when stepping on the mat, others don\'t."',meaning:'マットに上がる際のお辞儀や帯順の整列などの作法はジム・アカデミーごとに異なる（必ずお辞儀をするわけではない）。周りをよく観察して合わせるのが一番のエチケット。'}]},
+  {id:'dropin',title:'出稽古・遠征',subtitle:'Drop-in Visits Abroad',desc:'海外のジムに出稽古（ドロップイン）する際に必要になる実践的な会話。事前連絡から当日の支払い、お土産購入まで。',type:'phrase',items:[
+    {term:'事前の問い合わせ',en:'"Hi! I\'ll be in town next week. Do you accept drop-ins?"',meaning:'訪問前にメールやSNSのDMで連絡を入れるのが丁寧。「来週そちらの街に行くのですが、ドロップインは受け付けていますか？」'},
+    {term:'料金の確認',en:'"What\'s the mat fee for a visitor? Can I pay by card?"',meaning:'ビジター料金（マットフィー）の確認。海外では10〜30ドル程度が相場で、無料のジムやTシャツ購入で無料になるジムもある。カード払い可否も確認すると安心。'},
+    {term:'スケジュール確認',en:'"What time does the fundamentals class start? Do you have No-Gi classes?"',meaning:'クラスの開始時間とレベル（基礎/オールレベル/上級）、GiかNo-Giかを確認する。'},
+    {term:'道着の規定',en:'"Do I need a white gi, or is any color okay?"',meaning:'アカデミーによっては道着の色に規定がある（白のみ、黒NG等）。事前に確認しておくとベター。'},
+    {term:'レンタル・忘れ物',en:'"Do you rent gis? I forgot my belt — could I borrow one?"',meaning:'レンタル道着の有無の確認。旅行中の荷物を減らしたい時や、うっかり帯を忘れた時に使える表現。'},
+    {term:'レベルの確認',en:'"Is this class okay for visitors? I\'m a blue belt with about three years of experience."',meaning:'自分が参加して問題ないクラスかを確認しつつ、帯と経験年数を簡潔に伝える。'},
+    {term:'お土産・パッチ',en:'"Do you sell gym patches or rash guards?"',meaning:'ジムのパッチやラッシュガードの購入は、記念になるだけでなく、受け入れてくれたジムへの敬意と貢献にもなる定番の行動。'},
+    {term:'お礼と再訪の約束',en:'"Thank you for having me! Can I tag the gym on Instagram? I\'ll come back next time I\'m in town."',meaning:'受け入れてくれたことへのお礼。SNSでのタグ付け確認と再訪の約束は、良い関係づくりの締めくくりになる。'}]},
   {id:'body',title:'身体部位',subtitle:'Anatomical Body Parts',desc:'技の説明において、関節や骨の正確な位置を指示するための身体部位の英単語。',type:'term',items:[
     {term:'Head / Forehead',meaning:'頭 / 額',detail:''},{term:'Neck / Throat',meaning:'首 / 喉、気管',detail:''},{term:'Shoulder',meaning:'肩',detail:''},{term:'Shoulder Blade (Scapula)',meaning:'肩甲骨',detail:''},{term:'Armpit',meaning:'脇の下',detail:''},{term:'Chest / Ribs',meaning:'胸 / 肋骨',detail:''},{term:'Belly / Torso',meaning:'腹 / 胴体',detail:''},{term:'Back / Spine',meaning:'背中 / 脊椎',detail:''},{term:'Arm / Forearm',meaning:'腕 / 前腕',detail:''},{term:'Elbow / Bicep',meaning:'肘 / 上腕二頭筋',detail:''},{term:'Wrist / Hand',meaning:'手首 / 手',detail:''},{term:'Fingers / Thumb',meaning:'指 / 親指',detail:''},{term:'Hips / Pelvis',meaning:'股関節、腰 / 骨盤',detail:''},{term:'Thigh / Hamstring',meaning:'太もも / ハムストリング',detail:''},{term:'Knee / Shin',meaning:'膝 / 脛（すね）',detail:''},{term:'Calf',meaning:'ふくらはぎ',detail:''},{term:'Ankle / Heel',meaning:'足首 / 踵（かかと）',detail:''},{term:'Foot / Toes',meaning:'足 / 足の指',detail:''},{term:'Joint / Ligament',meaning:'関節 / 靭帯',detail:''},{term:'Instep (Laces)',meaning:'足の甲',detail:''}]},
   {id:'injuries',title:'怪我・コンディション',subtitle:'Injuries & Conditions',desc:'スパーリング前に自身の怪我や疲労状態を共有し、事故を未然に防ぐための表現。',type:'phrase',items:[
@@ -635,7 +845,7 @@ const DATA = [
     {term:'誘いの表現',en:'"Would you like to roll?" / "Care for a round?"',meaning:'スパーリングしませんか？ / 1ラウンドやりませんか？'},
     {term:'強度の設定',en:'"Let\'s go light. Maybe around 70%?"',meaning:'軽く行きましょう。70%くらいの力でどうですか？'},
     {term:'フロースパー',en:'"Can we flow roll? I want to focus on movement and transitions without muscling it."',meaning:'フロースパー（力に頼らず動きを止めないスパーリング）をしませんか？動きとトランジション（移行）に集中したいんです。'},
-    {term:'ハードな練習',en:'"I\'m training for a competition, so can we go hard (porrada)?"',meaning:'試合に向けて練習しているので、ハードに（ポラーダで）やってもいいですか？'},
+    {term:'ハードな練習',en:'"I\'m training for a competition, so can we go hard?"',meaning:'試合に向けて練習しているので、ハードにやってもいいですか？'},
     {term:'タップの重要性',en:'"Remember to tap early and tap often. There is no ego on the mat. Tapping is just learning."',meaning:'早くタップし、頻繁にタップすることを忘れないでください。マットの上にエゴ（プライド）は不要です。タップすることは学ぶプロセスに過ぎません。'},
     {term:'安全な極め方',en:'"If you catch a joint lock, apply it slowly to give your partner time to tap."',meaning:'関節技を捕らえたら、パートナーがタップする時間を与えるためにゆっくり極めてください。'},
     {term:'禁止事項',en:'"Always grab 3 or more fingers at a time, never less. Finger bending is illegal."',meaning:'指を掴む時は常に3本以上をまとめて掴み、それ以下は避けてください。指を曲げる行為は反則です。'},
@@ -652,6 +862,108 @@ const DATA = [
 ];
 
 // ========================================
+//  LISTENING STORIES (朗読ストーリー)
+// ========================================
+const STORIES=[
+{title:'Story 1: Drop-in Day — 出稽古初日',desc:'事前の問い合わせから道場到着、エチケット、ウォームアップ、テクニッククラスまで。出稽古・挨拶・クラス進行・基本語彙の表現を網羅した長編。',speakers:{A:'Ken',B:'Coach',N:'ナレ'},lines:[
+{sp:'N',en:'Ken, a blue belt from Tokyo, is planning a trip to San Diego. Before flying, he sends a message to a local BJJ academy.',jp:'東京の青帯ケンはサンディエゴ旅行を計画中。出発前に、現地の柔術アカデミーへメッセージを送る。'},
+{sp:'A',en:'Hi! I\'ll be in town next week. Do you accept drop-ins?',jp:'こんにちは！来週そちらの街に行きます。ドロップイン（出稽古）は受け付けていますか？'},
+{sp:'B',en:'Absolutely! The mat fee for a visitor is twenty dollars, and yes, you can pay by card.',jp:'もちろん！ビジターのマット料金は20ドルで、カード払いもOKですよ。'},
+{sp:'A',en:'What time does the fundamentals class start? And do you have No-Gi classes?',jp:'ベーシッククラスは何時からですか？ノーギクラスはありますか？'},
+{sp:'B',en:'Fundamentals is at seven, and No-Gi is on Fridays. Is this your first visit?',jp:'ベーシックは7時から、ノーギは金曜です。初めての来訪ですか？'},
+{sp:'A',en:'Yes. Is the class okay for visitors? I\'m a blue belt with about three years of experience. Also, do I need a white gi, or is any color okay?',jp:'はい。ビジターでも大丈夫なクラスですか？柔術歴3年ほどの青帯です。あと、道着は白限定ですか？何色でも大丈夫ですか？'},
+{sp:'B',en:'Any color is fine. And if you\'re traveling light, we rent gis — belts too, if you forget yours.',jp:'何色でも大丈夫。荷物を減らしたいならレンタル道着もあるし、帯を忘れても貸し出せますよ。'},
+{sp:'N',en:'A week later, Ken walks into the academy. His gi is freshly washed — a smelly gi is a big no-no anywhere in the world.',jp:'一週間後、ケンはアカデミーに到着。道着は洗いたてだ。臭う道着は世界中どこでもNG。'},
+{sp:'B',en:'Welcome to our academy! Are you dropping in for today\'s class?',jp:'ようこそ！今日のクラスへのドロップインですか？'},
+{sp:'A',en:'Oss! Yes, I messaged you last week. I\'m Ken from Tokyo.',jp:'オス！はい、先週メッセージしたケンです。東京から来ました。'},
+{sp:'B',en:'Ken! Where do you usually train, and what belt are you?',jp:'ケン！普段はどこで練習を？帯は何色ですか？'},
+{sp:'A',en:'A small academy in Tokyo. Blue belt.',jp:'東京の小さなアカデミーで、青帯です。'},
+{sp:'B',en:'Perfect. Please sign the waiver here. The changing room and restrooms are over there.',jp:'完璧。こちらの免責同意書にサインを。更衣室とトイレはあちらです。'},
+{sp:'N',en:'In the changing room, Ken double-checks his nails — trimmed short — and puts his ring and necklace in his bag.',jp:'更衣室でケンは爪をチェック——短く切ってある。指輪とネックレスはバッグの中へ。'},
+{sp:'N',en:'He watches the locals. Some gyms bow when stepping onto the mat, some don\'t. Here, people just walk on and stretch. Follow the locals.',jp:'現地の人たちを観察する。マットに上がる時にお辞儀をするジムもあれば、しないジムもある。ここでは皆そのまま上がってストレッチ。郷に従え、だ。'},
+{sp:'B',en:'Alright everyone! Let\'s start the warm-up. Jog in a circle!',jp:'さあみんな！ウォームアップ開始。円になってジョギング！'},
+{sp:'B',en:'Forward rolls and backward rolls down the mat. Then breakfalls — tuck your chin to protect your head.',jp:'マットの端まで前転と後転。次は受け身——頭を守るために顎を引いて。'},
+{sp:'B',en:'Shrimping! Plant your feet and move your hips away. Now bear crawls and sprawls!',jp:'エビ！足を突っ張って腰を遠ざける。次はベアクロールとスプロール！'},
+{sp:'N',en:'Warm-up done. Time to drill.',jp:'ウォームアップ終了。ドリルの時間だ。'},
+{sp:'B',en:'Partner up! Today\'s technique is the scissor sweep from closed guard.',jp:'ペアを組んで！今日の技はクローズドガードからのシザースイープです。'},
+{sp:'B',en:'Grip the collar — or the lapel — and the sleeve at the cuff. Place your shin across their belt line, like a blade.',jp:'衿——またはラペル——と袖口を掴む。すねを刃のようにベルトラインに当てて。'},
+{sp:'B',en:'One person on top, one person on the bottom. Uke, give a realistic but cooperative reaction.',jp:'一人が上、一人が下。受け手はリアルだけど協力的な反応で。'},
+{sp:'B',en:'Three reps each, then switch. Once it feels smooth, add a little resistance to check the mechanics.',jp:'3回ずつやったら交代。スムーズになったら、少し抵抗を加えて技の仕組みを確認して。'},
+{sp:'A',en:'Professor, my sweep feels weak. What am I doing wrong?',jp:'先生、スイープに力が乗りません。何が悪いんでしょう？'},
+{sp:'B',en:'You\'re pulling with your arms only. Your legs are the levers, and levers are force multipliers. Break their posture first, then scissor.',jp:'腕だけで引いてるね。脚がテコで、テコは力を増幅する。まず相手の姿勢を崩してから、ハサミだ。'},
+{sp:'A',en:'Oss! And what\'s the easiest way to off-balance them?',jp:'オス！相手のバランスを崩す一番簡単な方法は？'},
+{sp:'B',en:'Pull the moment they push. Timing beats strength — that\'s jiu-jitsu.',jp:'相手が押した瞬間に引く。タイミングは力に勝る——それが柔術。'},
+{sp:'N',en:'After class, Ken buys a gym patch and a rash guard as souvenirs.',jp:'クラスの後、ケンはジムパッチとラッシュガードをお土産に購入した。'},
+{sp:'A',en:'Thank you for having me! Can I tag the gym on Instagram? I\'ll come back next time I\'m in town.',jp:'受け入れてくれてありがとうございました！インスタでジムをタグ付けしてもいいですか？また街に来たら必ず寄ります！'},
+{sp:'B',en:'Any time, Ken. Oss!',jp:'いつでもおいで、ケン。オス！'}]},
+{title:'Story 2: Open Mat Rounds — オープンマットのロール',desc:'スパーリングの誘い方から強度設定、ガード・ポジションの攻防、バイオメカニクス、タップの哲学まで。スパーリング・怪我・魔法のフレーズを網羅した長編。',speakers:{A:'Ken',B:'Maria',C:'Tom',N:'ナレ'},lines:[
+{sp:'N',en:'Saturday open mat. Ken spots Maria, a brown belt whose smooth guard passing he was watching earlier.',jp:'土曜のオープンマット。ケンは、さっき華麗なパスガードを見ていた茶帯のマリアを見つける。'},
+{sp:'A',en:'Excuse me, Maria — would you like to roll?',jp:'すみません、マリアさん——ロールしませんか？'},
+{sp:'B',en:'Sure, I\'d love to!',jp:'もちろん、喜んで！'},
+{sp:'A',en:'One thing — my right shoulder is a little banged up, so please go easy on that side.',jp:'ひとつだけ——右肩を少し痛めているので、そちら側はお手柔らかにお願いします。'},
+{sp:'B',en:'Got it. Let\'s go light, around seventy percent. If I catch a joint lock, I\'ll apply it slowly — tap any time.',jp:'了解。軽めに、70％くらいで。関節を取ったらゆっくり極めるから、いつでもタップしてね。'},
+{sp:'N',en:'Maria is much lighter than Ken. He reminds himself: with women and lighter partners, don\'t rely on weight and strength. Let the technique talk.',jp:'マリアはケンよりずっと軽い。女性や軽い相手に体重と力は使わない。技に語らせるのだ。'},
+{sp:'N',en:'Slap, bump — the roll begins. Ken pulls closed guard, gripping the collar and sleeve.',jp:'スラップ、バンプ——ロール開始。ケンはクローズドガードを引き込み、衿と袖を掴む。'},
+{sp:'N',en:'Maria postures up — head up, spine straight — elbows glued to her ribs like a T-Rex.',jp:'マリアは頭を上げ、背筋を伸ばして姿勢を立てる。肘はティラノサウルスのように肋骨へ密着。'},
+{sp:'N',en:'She stands with a wide, stable base, wedges a hand against Ken\'s hip, and starts a toreando pass, gripping the pants at both knees.',jp:'広く安定したベースで立ち上がり、手をケンの腰に楔（くさび）として当て、両膝のズボンを掴んでトレアンドパスを開始。'},
+{sp:'N',en:'Ken frames on her shoulders, shrimps away, and recovers half guard with a strong knee shield.',jp:'ケンは肩にフレームを当て、エビで腰を逃がし、ニーシールド付きのハーフガードを回復。'},
+{sp:'N',en:'Maria switches to a knee slice — her shin cuts across his thigh, her underhook digs deep into his armpit.',jp:'マリアはニースライスへ切り替える。すねが太ももを横切り、アンダーフックが脇の下深くに刺さる。'},
+{sp:'N',en:'Side control. Her hips are heavy, her shoulder presses his jawline, and her toes stay active — never flat on the laces.',jp:'サイドコントロール。腰は重く、肩が顎のラインを圧迫し、足の指は常に立てたまま——足の甲を寝かせない。'},
+{sp:'N',en:'Ken stays calm. Breathe, relax your face. He frames against her neck and far hip — a bony shield. Skeleton, not muscle.',jp:'ケンは冷静だ。呼吸して、顔の力を抜く。首と遠い側の腰にフレームを当てる。筋肉ではなく、骨格の盾。'},
+{sp:'N',en:'But Maria floats into mount, knees wide, squeezing his pelvis.',jp:'だがマリアはふわりとマウントへ。膝を広げ、骨盤を挟み込む。'},
+{sp:'N',en:'Ken bridges hard, traps an arm and a leg, and rolls — the upa escape! Now he\'s on top, inside her closed guard.',jp:'ケンは強くブリッジし、腕と脚をトラップしてロール——ウパで脱出！今度はケンが上、マリアのクローズドガードの中だ。'},
+{sp:'N',en:'Maria sits up for a hip bump sweep. Ken barely posts his hand in time.',jp:'マリアはヒップバンプスイープで起き上がる。ケンは間一髪で手をついて防ぐ。'},
+{sp:'N',en:'So she shifts to spider guard, feet on his biceps, stretching him like a puppet.',jp:'するとマリアはスパイダーガードへ。足を上腕二頭筋に置き、ケンを操り人形のように伸ばす。'},
+{sp:'N',en:'Then an outside hook on his lead leg — De La Riva — controlling the ankle and sleeve.',jp:'さらに前脚の外側にフック——デラヒーバだ。足首と袖をコントロールする。'},
+{sp:'N',en:'Ken tries to smash forward, but she dives under his center of gravity — deep half guard — and rolls him over. Swept!',jp:'ケンは前に潰しにいくが、マリアは重心の真下へ潜り込む——ディープハーフ。そのまま転がされ、スイープ！'},
+{sp:'N',en:'She passes and takes the back — chest tight to his shoulder blades, hooks in, seatbelt grip.',jp:'パスからバックへ。胸を肩甲骨に密着させ、両フックを入れて、シートベルトグリップ。'},
+{sp:'N',en:'A forearm slides toward his throat. Ken tucks his chin and peels the hand, starting from the thumb.',jp:'前腕が喉元へ滑り込む。ケンは顎を引き、親指側から手を剥がしにかかる。'},
+{sp:'N',en:'The second attack sinks in anyway. Ken taps early. Tap early, tap often — there is no ego on the mat.',jp:'それでも第二波のチョークが極まる。ケンは早めにタップ。早く、頻繁に——マットの上にエゴは不要だ。'},
+{sp:'B',en:'Are you okay? Did I catch you with a stray knee in that scramble?',jp:'大丈夫？さっきのスクランブルで膝が当たらなかった？'},
+{sp:'A',en:'All good! Sorry, that was my fault — I dove straight into the choke. What\'s your highest percentage attack from the back?',jp:'大丈夫です！チョークに自分から突っ込んだ僕のミスです。バックからの一番成功率の高い攻めは何ですか？'},
+{sp:'B',en:'The rear naked choke, no question. From side control I hunt the kimura — wrist control, figure-four grip, rotate toward the back of the head.',jp:'文句なしで裸絞めね。サイドコントロールからはキムラを狙うわ——手首を制して、4の字グリップ、後頭部の方向へ回す。'},
+{sp:'A',en:'And your bread and butter sweep?',jp:'十八番（ブレッド・アンド・バター）のスイープは？'},
+{sp:'B',en:'The deep half roll. Simple beats fancy.',jp:'ディープハーフのロールよ。シンプルは派手に勝つの。'},
+{sp:'N',en:'Round two: Tom, a big white belt preparing for his first tournament.',jp:'2本目の相手はトム。初試合を控えた大柄な白帯だ。'},
+{sp:'C',en:'I\'m competing next month — can we go hard?',jp:'来月試合に出るんだ——ハードにやってもいい？'},
+{sp:'A',en:'Sure! But my left knee is a bit tweaked, so I might tap early to leg locks.',jp:'いいですよ！ただ左膝に少し違和感があるので、足関節には早めにタップします。'},
+{sp:'N',en:'Tom explodes forward and grabs just two of Ken\'s fingers to break a grip.',jp:'トムは爆発的に前進し、グリップを切ろうとケンの指を2本だけ掴む。'},
+{sp:'B',en:'Careful, Tom! Always grab three or more fingers, never less. Finger bending is illegal.',jp:'気をつけて、トム！指は必ず3本以上まとめて掴むこと。指曲げは反則よ。'},
+{sp:'N',en:'The pairs drift together. "We\'re too close — let\'s reset in the center. Keep the same position."',jp:'ペア同士が接近しすぎた。「近すぎる——真ん中でリセットしよう。同じポジションのまま」'},
+{sp:'N',en:'The buzzer sounds. Everyone is gassed — red faces, burning lungs.',jp:'ブザーが鳴る。全員ガス欠だ——赤い顔に、燃えるような肺。'},
+{sp:'A',en:'Maria, can we flow roll to cool down? I want to focus on transitions without muscling anything.',jp:'マリア、クールダウンにフロースパーしませんか？力に頼らず、トランジションに集中したいんです。'},
+{sp:'B',en:'Perfect. One tip first: in your triangles — one arm in, one arm out, shoot your hips up. You\'re using too much strength. Relax your grips, cut the angle, and squeeze your knees.',jp:'いいね。その前にひとつアドバイス。三角絞めは「片腕を入れ、片腕を出し、腰を跳ね上げる」。今は力みすぎ。グリップを緩めて、角度を作って、膝を締めるの。'},
+{sp:'A',en:'Oss! Thank you for the rolls. Your pressure is unbelievable, and that deep half sweep was perfectly timed.',jp:'オス！ありがとうございました。プレッシャーは信じられない重さでしたし、ディープハーフスイープのタイミングも完璧でした。'},
+{sp:'N',en:'On the notice board: "No training with ringworm, staph, or open cuts. Wash your gi and belt after every session."',jp:'掲示板にはこう書いてある。「白癬・ブドウ球菌感染・開いた傷がある場合は練習禁止。道着と帯は毎回洗濯すること」'}]},
+{title:'Story 3: Competition Day — 試合の日',desc:'審判コマンド、ポイントシステム、帯別ルール、反則、そして一本勝ちまで。ルール・審判・テクニックの表現を網羅した長編。',speakers:{A:'Ken',B:'Referee',N:'ナレ'},lines:[
+{sp:'N',en:'Sunday. A local tournament. In the venue, all five adult belts: white, blue, purple, brown, and black.',jp:'日曜、地元のトーナメント。会場には大人の5つの帯が揃う——白、青、紫、茶、黒。'},
+{sp:'N',en:'At blue belt in Gi, heel hooks are illegal and knee reaping is a foul. Only the straight ankle lock is allowed — kneebars and toe holds must wait until brown belt.',jp:'青帯のGi試合ではヒールフックは反則、ニーリーピングも反則。合法なのはストレートアンクルロックのみ——ニーバーとトーホールドは茶帯までお預けだ。'},
+{sp:'N',en:'Ken warms up, checking every joint and ligament — neck, shoulders, wrists, hips, knees, ankles — and stretches his hamstrings and calves.',jp:'ケンはウォームアップ。首、肩、手首、股関節、膝、足首——関節と靭帯をすべてチェックし、ハムストリングとふくらはぎを伸ばす。'},
+{sp:'B',en:'Adjust your gi and re-tie your belt, please.',jp:'道着を直して、帯を締め直してください。'},
+{sp:'A',en:'Oss!',jp:'オス！'},
+{sp:'B',en:'Combate!',jp:'コンバッチ！（試合開始！）'},
+{sp:'N',en:'Ken changes his level, drops his hips, and shoots the double leg — head up, head outside the ribs, arms wrapped behind the knees, drive diagonally!',jp:'ケンはレベルを変えて腰を落とし、ダブルレッグへ——頭を上げ、肋骨の外側に置き、両腕を膝裏に回して、斜めに押し込む！'},
+{sp:'N',en:'Takedown, two points! And no lifting and slamming — slams are illegal at every belt. He finishes with control.',jp:'テイクダウンで2点！持ち上げて叩きつけるのはダメだ——スラムは全帯で反則。コントロールしながら倒しきる。'},
+{sp:'N',en:'The opponent closes his guard and grabs a deep collar grip. Ken postures — head up, straight spine — and peels the hand from the thumb.',jp:'相手はガードを閉じ、深い衿グリップを取る。ケンは頭を上げ、背筋を伸ばして姿勢を立て、親指側から手を剥がす。'},
+{sp:'N',en:'Ken stands, opens the guard, and knee slices across the thigh with a deep underhook. Guard pass — three points!',jp:'ケンは立ってガードを開き、深いアンダーフックとともにニースライス。パスガードで3点！'},
+{sp:'N',en:'He slides to knee on belly — two more points — and attacks the armbar: leg over the head, knees pinched, thumb up, hips rising.',jp:'ニーオンベリーへ移行——さらに2点——そして腕十字へ。脚を頭上に回し、膝を締め、親指は上向き、腰を上げていく。'},
+{sp:'N',en:'The opponent hides his arm and escapes. No finish — but Ken earns an advantage.',jp:'相手は腕を隠して脱出。極めきれなかったが、ケンにアドバンテージ。'},
+{sp:'N',en:'Frustrated, the opponent grips and stalls, refusing to engage.',jp:'苛立った相手はグリップしたまま膠着し、攻めようとしない。'},
+{sp:'B',en:'Lute! Lute!',jp:'ルーチ！（闘え！）'},
+{sp:'N',en:'A penalty for stalling. If the score ends tied, advantages and penalties decide the winner.',jp:'消極性へのペナルティ。同点で終われば、アドバンテージとペナルティが勝敗を決める。'},
+{sp:'N',en:'Desperate, the opponent attempts a scissor takedown — dangerous and illegal.',jp:'追い込まれた相手はシザーテイクダウンを試みる——危険な反則技だ。'},
+{sp:'B',en:'Falta!',jp:'ファウタ！（反則！）'},
+{sp:'N',en:'Restart in the center. The opponent turns; Ken takes the back — hooks in, seatbelt — four points!',jp:'中央から再開。相手が背を向けた瞬間、ケンはバックを取る——両フックとシートベルトで4点！'},
+{sp:'N',en:'Chest glued to the back, Ken threads his forearm under the chin, across the throat, and grips his own bicep.',jp:'胸を背中に密着させ、前腕を顎の下から喉へ通し、自分の上腕二頭筋を掴む。'},
+{sp:'N',en:'He squeezes with his back and shoulders — smooth, never cranking the neck. The opponent taps twice.',jp:'背中と肩で滑らかに絞める——首は決して捻らない。相手が2回タップした。'},
+{sp:'B',en:'Parou!',jp:'パロウ！（終了！）'},
+{sp:'N',en:'Submission victory! The tap ends everything, whatever the score. Position before submission — always.',jp:'一本勝ち！スコアがどうであれ、タップが全てを終わらせる。「極めの前にポジション」——常にこれだ。'},
+{sp:'A',en:'Oss! All those drills paid off.',jp:'オス！ドリルの積み重ねが実を結んだ。'},
+{sp:'N',en:'On the podium, Ken re-ties his belt and thinks of the road ahead: purple, brown, black. Tomorrow, he drills again.',jp:'表彰台でケンは帯を締め直し、この先の道を思う——紫、茶、そして黒へ。明日もまた、ドリルだ。'}]}
+];
+DATA.push({id:'stories',title:'朗読ストーリー',subtitle:'Listening Stories',desc:'全カテゴリの単語とフレーズを織り込んだ長編ストーリー3本。連続再生・シャッフル再生で聞き流し学習ができます。行をクリックすると個別再生。',type:'story',items:STORIES});
+
+// ========================================
 //  APP LOGIC
 // ========================================
 let currentCategory = 'vocab';
@@ -659,18 +971,19 @@ let mode = 'study';
 let learned = JSON.parse(localStorage.getItem('bjj_learned') || '{}');
 const SPEAK_SVG = '<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>';
 function stripQuotes(t){return t.replace(/^["""]+|["""]+$/g,'').trim();}
+function ttsFix(t){return t.replace(/no-gi/gi,'no ghee').replace(/\bgi\b/gi,'ghee');}
 function getEnglishText(item){if(item.en)return stripQuotes(item.en);if(item.term)return item.term;return '';}
-function speak(e,text){e.stopPropagation();const clean=stripQuotes(text);if(!clean)return;window.speechSynthesis.cancel();const btn=e.currentTarget;document.querySelectorAll('.speak-btn.speaking').forEach(b=>b.classList.remove('speaking'));btn.classList.add('speaking');const u=new SpeechSynthesisUtterance(clean);u.lang='en-US';u.rate=0.85;const voices=window.speechSynthesis.getVoices();const v=voices.find(v=>v.lang.startsWith('en')&&v.name.includes('Google'))||voices.find(v=>v.lang.startsWith('en-US'))||voices.find(v=>v.lang.startsWith('en'));if(v)u.voice=v;u.onend=()=>btn.classList.remove('speaking');u.onerror=()=>btn.classList.remove('speaking');window.speechSynthesis.speak(u);}
+function speak(e,text){e.stopPropagation();const clean=ttsFix(stripQuotes(text));if(!clean)return;window.speechSynthesis.cancel();const btn=e.currentTarget;document.querySelectorAll('.speak-btn.speaking').forEach(b=>b.classList.remove('speaking'));btn.classList.add('speaking');const u=new SpeechSynthesisUtterance(clean);u.lang='en-US';u.rate=0.85;const voices=window.speechSynthesis.getVoices();const v=voices.find(v=>v.lang.startsWith('en')&&v.name.includes('Google'))||voices.find(v=>v.lang.startsWith('en-US'))||voices.find(v=>v.lang.startsWith('en'));if(v)u.voice=v;u.onend=()=>btn.classList.remove('speaking');u.onerror=()=>btn.classList.remove('speaking');window.speechSynthesis.speak(u);}
 window.speechSynthesis.getVoices();
-function getTotalItems(){return DATA.reduce((s,c)=>s+c.items.length,0)}
+function getTotalItems(){return DATA.reduce((s,c)=>s+(c.type==='story'?0:c.items.length),0)}
 function getLearnedCount(){return Object.keys(learned).length}
 function itemKey(catId,idx){return catId+'_'+idx}
 function updateGlobalProgress(){document.getElementById('globalProgress').textContent=getLearnedCount();document.getElementById('globalTotal').textContent=getTotalItems();}
 function saveLearned(){localStorage.setItem('bjj_learned',JSON.stringify(learned));updateGlobalProgress();renderNav();}
 function resetProgress(){if(!confirm('学習済みの記録をすべてリセットしますか？'))return;learned={};saveLearned();render();}
-function setMode(m){mode=m;document.querySelectorAll('.mode-btn').forEach(b=>{b.classList.toggle('active',b.dataset.mode===m);});render();}
-function renderNav(){const nav=document.getElementById('navList');nav.innerHTML=DATA.map((cat,i)=>{const total=cat.items.length;const done=cat.items.filter((_,j)=>learned[itemKey(cat.id,j)]).length;const completed=done===total;return `<div class="nav-item ${cat.id===currentCategory?'active':''} ${completed?'completed':''}" onclick="selectCategory('${cat.id}')"><span class="nav-num">${i+1}</span><span class="nav-label">${cat.title}</span><span class="nav-count">${done}/${total}</span><span class="nav-check">&#10003;</span></div>`;}).join('');}
-function selectCategory(id){currentCategory=id;render();}
+function setMode(m){stopStory();mode=m;document.querySelectorAll('.mode-btn').forEach(b=>{b.classList.toggle('active',b.dataset.mode===m);});render();}
+function renderNav(){const nav=document.getElementById('navList');nav.innerHTML=DATA.map((cat,i)=>{const total=cat.items.length;const isStory=cat.type==='story';const done=isStory?0:cat.items.filter((_,j)=>learned[itemKey(cat.id,j)]).length;const completed=!isStory&&done===total;const cnt=isStory?`${total}話`:`${done}/${total}`;return `<div class="nav-item ${cat.id===currentCategory?'active':''} ${completed?'completed':''}" onclick="selectCategory('${cat.id}')"><span class="nav-num">${isStory?'&#9654;':i+1}</span><span class="nav-label">${cat.title}</span><span class="nav-count">${cnt}</span><span class="nav-check">&#10003;</span></div>`;}).join('');}
+function selectCategory(id){stopStory();currentCategory=id;render();}
 function toggleCard(catId,idx){const el=document.getElementById('card-'+catId+'-'+idx);if(!el)return;el.classList.toggle('revealed');}
 function toggleLearned(e,catId,idx){e.stopPropagation();const key=itemKey(catId,idx);if(learned[key])delete learned[key];else learned[key]=1;saveLearned();const card=document.getElementById('card-'+catId+'-'+idx);if(card)card.classList.toggle('learned',!!learned[key]);}
 
@@ -680,9 +993,13 @@ function render(){
   const main=document.getElementById('mainContent');
   const catDone=cat.items.filter((_,j)=>learned[itemKey(cat.id,j)]).length;
   let html=`<div class="section-header"><h2>${cat.title} <span style="font-weight:400;color:var(--text-muted);font-size:1rem">${cat.subtitle}</span></h2><div class="section-desc">${cat.desc}</div></div>`;
-  html+=`<div class="stats-bar"><div class="stat blue"><span class="stat-val">${cat.items.length}</span> 項目</div><div class="stat green"><span class="stat-val">${catDone}</span> 学習済</div><div class="stat red"><span class="stat-val">${cat.items.length-catDone}</span> 未学習</div></div>`;
-  html+=`<div class="search-bar"><input type="text" placeholder="このカテゴリ内を検索..." oninput="filterItems(this.value)"></div>`;
-  html+=mode==='study'?renderStudyMode(cat):renderRefMode(cat);
+  if(cat.type==='story'){
+    html+=renderStoryMode(cat);
+  }else{
+    html+=`<div class="stats-bar"><div class="stat blue"><span class="stat-val">${cat.items.length}</span> 項目</div><div class="stat green"><span class="stat-val">${catDone}</span> 学習済</div><div class="stat red"><span class="stat-val">${cat.items.length-catDone}</span> 未学習</div></div>`;
+    html+=`<div class="search-bar"><input type="text" placeholder="このカテゴリ内を検索..." oninput="filterItems(this.value)"></div>`;
+    html+=mode==='study'?renderStudyMode(cat):renderRefMode(cat);
+  }
   main.innerHTML=html;updateGlobalProgress();
 }
 
@@ -726,6 +1043,111 @@ function renderRefMode(cat){
   let html=`<div style="overflow-x:auto"><table class="ref-table"><thead><tr><th>${cat.type==='phrase'?'状況・目的':'英語用語'}</th>${hasEn?'<th>英語表現</th>':''}<th style="width:40px"></th><th>意味・ニュアンス</th>${hasDetail?'<th>備考</th>':''}</tr></thead><tbody>`;
   cat.items.forEach(item=>{const st=getEnglishText(item);html+=`<tr><td class="col-term">${item.term}</td>${hasEn?`<td class="col-detail" style="color:var(--blue)">${item.en||''}</td>`:''}<td><button class="speak-btn ref-speak" onclick="speak(event,\`${st.replace(/`/g,"'")}\`)" title="読み上げ">${SPEAK_SVG}</button></td><td class="col-meaning">${item.meaning}</td>${hasDetail?`<td class="col-detail">${item.detail||''}</td>`:''}</tr>`;});
   return html+`</tbody></table></div>`;
+}
+
+function renderStoryMode(cat){
+  return `<div class="story-all-bar">
+    <button class="story-play" id="story-all-btn" onclick="playAllStories(false)">&#9654; 全話連続再生</button>
+    <button class="story-play secondary" id="story-shuffle-btn" onclick="playAllStories(true)">&#128256; シャッフル再生</button>
+  </div>
+  <div class="story-hint">&#9654; で個別再生、上のボタンで全話を通し・シャッフル再生。各行クリックでその行だけ聞けます。話者ごとに声のトーンが変わります。</div>`+cat.items.map((st,si)=>`
+  <div class="story-card">
+    <div class="story-head">
+      <div style="flex:1;min-width:200px"><div class="story-title">${st.title}</div><div class="story-desc">${st.desc}</div></div>
+      <button class="story-play" id="story-btn-${si}" onclick="playStory(${si})">&#9654; 朗読スタート</button>
+    </div>
+    <div class="story-lines">${st.lines.map((ln,li)=>`
+      <div class="story-line" id="sline-${si}-${li}" onclick="speakStoryLine(${si},${li})">
+        <div class="story-sp ${ln.sp}">${st.speakers[ln.sp]||ln.sp}</div>
+        <div><div class="story-en">${ln.en}</div><div class="story-jp">${ln.jp}</div></div>
+      </div>`).join('')}
+    </div>
+  </div>`).join('');
+}
+
+// --- Story playback engine ---
+let storyPB={active:null,idx:0,token:0,queue:null,qpos:0};
+function enVoices(){return window.speechSynthesis.getVoices().filter(v=>v.lang&&v.lang.toLowerCase().startsWith('en'));}
+function storyVoice(spk){const vs=enVoices();if(!vs.length)return null;const us=vs.filter(v=>v.lang.replace('_','-').startsWith('en-US'));const pool=us.length?us:vs;if(spk==='B')return pool[1]||pool[0];if(spk==='N')return pool[2]||pool[0];if(spk==='C')return pool[3]||pool[1]||pool[0];return pool[0];}
+function mkStoryUtter(line){
+  const u=new SpeechSynthesisUtterance(ttsFix(stripQuotes(line.en)));
+  u.lang='en-US';
+  u.rate=line.sp==='N'?0.85:0.9;
+  u.pitch=line.sp==='A'?1.12:line.sp==='B'?0.85:line.sp==='C'?1.0:1.0;
+  const v=storyVoice(line.sp);if(v)u.voice=v;
+  return u;
+}
+function playAllStories(shuffle){
+  const ab=document.getElementById('story-all-btn');
+  const wasPlaying=storyPB.queue!==null;
+  stopStory();
+  if(wasPlaying&&!shuffle)return;
+  let q=STORIES.map((_,i)=>i);
+  if(shuffle){for(let i=q.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));const t=q[i];q[i]=q[j];q[j]=t;}}
+  storyPB.queue=q;storyPB.qpos=0;
+  if(ab){ab.innerHTML='&#9632; 停止';ab.classList.add('playing');}
+  startQueued();
+}
+function startQueued(){
+  if(!storyPB.queue)return;
+  const si=storyPB.queue[storyPB.qpos];
+  storyPB.active=si;storyPB.idx=0;storyPB.token++;
+  const b=document.getElementById('story-btn-'+si);
+  if(b){b.innerHTML='&#9632; 停止';b.classList.add('playing');}
+  storyNext();
+}
+function playStory(si){
+  if(storyPB.active===si){stopStory();return;}
+  stopStory();
+  storyPB.active=si;storyPB.idx=0;storyPB.token++;
+  const b=document.getElementById('story-btn-'+si);
+  if(b){b.innerHTML='&#9632; 停止';b.classList.add('playing');}
+  storyNext();
+}
+function storyNext(){
+  if(storyPB.active===null)return;
+  const si=storyPB.active,st=STORIES[si];
+  if(storyPB.idx>=st.lines.length){
+    const fb=document.getElementById('story-btn-'+si);
+    if(fb){fb.innerHTML='&#9654; 朗読スタート';fb.classList.remove('playing');}
+    if(storyPB.queue&&storyPB.qpos<storyPB.queue.length-1){
+      storyPB.qpos++;
+      const qtok=++storyPB.token;
+      setTimeout(()=>{if(storyPB.queue&&storyPB.token===qtok)startQueued();},900);
+      return;
+    }
+    stopStory();return;
+  }
+  const tok=storyPB.token,li=storyPB.idx;
+  document.querySelectorAll('.story-line.now').forEach(e=>e.classList.remove('now'));
+  const el=document.getElementById(`sline-${si}-${li}`);
+  if(el){el.classList.add('now');el.scrollIntoView({block:'center',behavior:'smooth'});}
+  const u=mkStoryUtter(st.lines[li]);
+  const advance=()=>{if(storyPB.active===si&&storyPB.token===tok){storyPB.idx++;setTimeout(()=>{if(storyPB.active===si&&storyPB.token===tok)storyNext();},350);}};
+  u.onend=advance;u.onerror=advance;
+  window.speechSynthesis.speak(u);
+}
+function stopStory(){
+  storyPB.token++;
+  if(window.speechSynthesis)window.speechSynthesis.cancel();
+  if(storyPB.active!==null){
+    const b=document.getElementById('story-btn-'+storyPB.active);
+    if(b){b.innerHTML='&#9654; 朗読スタート';b.classList.remove('playing');}
+  }
+  const ab=document.getElementById('story-all-btn');
+  if(ab){ab.innerHTML='&#9654; 全話連続再生';ab.classList.remove('playing');}
+  document.querySelectorAll('.story-line.now').forEach(e=>e.classList.remove('now'));
+  storyPB.active=null;storyPB.idx=0;storyPB.queue=null;storyPB.qpos=0;
+}
+function speakStoryLine(si,li){
+  stopStory();
+  const line=STORIES[si].lines[li];
+  const el=document.getElementById(`sline-${si}-${li}`);
+  if(el)el.classList.add('now');
+  const u=mkStoryUtter(line);
+  u.onend=()=>{if(el)el.classList.remove('now');};
+  u.onerror=()=>{if(el)el.classList.remove('now');};
+  window.speechSynthesis.speak(u);
 }
 
 function filterItems(query){
