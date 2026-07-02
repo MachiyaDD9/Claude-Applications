@@ -1,0 +1,24 @@
+{
+  "name": "BJJ English Guide - 柔術英会話ガイド",
+  "short_name": "BJJ English",
+  "description": "ブラジリアン柔術で使う英会話を学ぶためのガイドアプリ",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0f1117",
+  "theme_color": "#0f1117",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

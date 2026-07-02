@@ -15,7 +15,8 @@
       "PowerShell(Start-Process \"C:\\\\Users\\\\daisa\\\\Claude Applications\\\\bjj-english-guide\\\\index.html\")",
       "PowerShell(winget install OpenJS.NodeJS.LTS --accept-package-agreements --accept-source-agreements)",
       "PowerShell($env:Path = [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"Machine\"\\) + \";\" + [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"User\"\\); \\(Get-Command npx\\).Source)",
-      "Bash(ls \"/c/Program Files/nodejs/\" | head -20)"
+      "Bash(ls \"/c/Program Files/nodejs/\" | head -20)",
+      "WebSearch"
     ]
   }
 }
