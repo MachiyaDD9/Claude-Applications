@@ -16,7 +16,11 @@
       "PowerShell(winget install OpenJS.NodeJS.LTS --accept-package-agreements --accept-source-agreements)",
       "PowerShell($env:Path = [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"Machine\"\\) + \";\" + [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"User\"\\); \\(Get-Command npx\\).Source)",
       "Bash(ls \"/c/Program Files/nodejs/\" | head -20)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(\"/c/Program Files/nodejs/node.exe\" \"C:\\\\Users\\\\daisa\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--Users-daisa-Claude-Applications\\\\00f9f418-4c0f-4287-99b0-65dadc419066\\\\scratchpad\\\\replace_stories.js\" \"C:\\\\Users\\\\daisa\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--Users-daisa-Claude-Applications\\\\00f9f418-4c0f-4287-99b0-65dadc419066\\\\scratchpad\\\\stories_block.txt\")",
+      "Bash(gh repo *)",
+      "Bash(curl -s \"https://machiyadd9.github.io/Claude-Applications/bjj-english-guide/index.html\")",
+      "Bash(curl -s \"https://machiyadd9.github.io/Claude-Applications/bjj-english-guide/sw.js\")"
     ]
   }
 }
