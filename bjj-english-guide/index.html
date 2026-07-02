@@ -993,7 +993,7 @@ const SPEAK_SVG = '<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 
 function stripQuotes(t){return t.replace(/^["""]+|["""]+$/g,'').trim();}
 function ttsFix(t){return t.replace(/no-gi/gi,'no ghee').replace(/\bgi\b/gi,'ghee');}
 function getEnglishText(item){if(item.en)return stripQuotes(item.en);if(item.term)return item.term;return '';}
-function speak(e,text){e.stopPropagation();const clean=ttsFix(stripQuotes(text));if(!clean)return;window.speechSynthesis.cancel();const btn=e.currentTarget;document.querySelectorAll('.speak-btn.speaking').forEach(b=>b.classList.remove('speaking'));btn.classList.add('speaking');const u=new SpeechSynthesisUtterance(clean);u.lang='en-US';u.rate=0.95;const voices=window.speechSynthesis.getVoices();const v=voices.find(v=>v.lang.startsWith('en')&&v.name.includes('Google'))||voices.find(v=>v.lang.startsWith('en-US'))||voices.find(v=>v.lang.startsWith('en'));if(v)u.voice=v;u.onend=()=>btn.classList.remove('speaking');u.onerror=()=>btn.classList.remove('speaking');window.speechSynthesis.speak(u);}
+function speak(e,text){e.stopPropagation();const clean=ttsFix(stripQuotes(text));if(!clean)return;window.speechSynthesis.cancel();const btn=e.currentTarget;document.querySelectorAll('.speak-btn.speaking').forEach(b=>b.classList.remove('speaking'));btn.classList.add('speaking');const u=new SpeechSynthesisUtterance(clean);u.lang='en-US';u.rate=0.95;const v=goodEnVoices()[0];if(v)u.voice=v;u.onend=()=>btn.classList.remove('speaking');u.onerror=()=>btn.classList.remove('speaking');window.speechSynthesis.speak(u);}
 window.speechSynthesis.getVoices();
 function getTotalItems(){return DATA.reduce((s,c)=>s+(c.type==='story'?0:c.items.length),0)}
 function getLearnedCount(){return Object.keys(learned).length}
@@ -1087,8 +1087,39 @@ function renderStoryMode(cat){
 
 // --- Story playback engine ---
 let storyPB={active:null,idx:0,token:0,queue:null,qpos:0};
-function enVoices(){return window.speechSynthesis.getVoices().filter(v=>v.lang&&v.lang.toLowerCase().startsWith('en'));}
-function storyVoice(spk){const vs=enVoices();if(!vs.length)return null;const us=vs.filter(v=>v.lang.replace('_','-').startsWith('en-US'));const pool=us.length?us:vs;if(spk==='B')return pool[1]||pool[0];if(spk==='N')return pool[2]||pool[0];if(spk==='C')return pool[3]||pool[1]||pool[0];return pool[0];}
+// ノベルティ音声（歌う声・かすれ声・ロボット声など）を除外
+const BAD_VOICE=/bad news|good news|bahh|bells|boing|bubbles|cellos|albert|jester|organ|superstar|trinoids|whisper|wobble|zarvox|grandma|grandpa|rocko|shelley|eddy|flo\b|reed|sandy|ralph|kathy|junior|fred|deranged|hysterical|pipe/i;
+const MALE_VOICE=/daniel|aaron|rishi|arthur|gordon|david|mark|guy|oliver|james|\bmale\b/i;
+function goodEnVoices(){
+  const all=window.speechSynthesis.getVoices().filter(v=>v.lang&&v.lang.toLowerCase().replace('_','-').startsWith('en'));
+  const ok=all.filter(v=>!BAD_VOICE.test(v.name));
+  const pool=ok.length?ok:all;
+  const score=v=>{
+    let s=0;const n=v.name.toLowerCase();
+    if(/natural|neural|premium|enhanced|siri/.test(n))s+=8;
+    if(n.includes('google'))s+=6;
+    if(/samantha|daniel|karen|moira|tessa|rishi|aaron|nicky|martha|arthur|catherine|matilda|zira|david|mark|jenny|aria|guy|sonia|libby|michelle|ava|allison|susan|tom\b/.test(n))s+=4;
+    if(v.lang.toLowerCase().replace('_','-').startsWith('en-us'))s+=2;
+    if(v.localService)s+=1;
+    return s;
+  };
+  return pool.slice().sort((a,b)=>score(b)-score(a));
+}
+let voiceMap=null,voiceMapCount=0;
+function storyVoice(spk){
+  const pool=goodEnVoices();
+  if(!pool.length)return null;
+  if(!voiceMap||voiceMapCount!==pool.length){
+    const used=new Set();const take=v=>{if(v)used.add(v.name);return v;};
+    voiceMap={};
+    voiceMap.A=take(pool.find(v=>MALE_VOICE.test(v.name))||pool[0]);
+    voiceMap.N=take(pool.find(v=>!used.has(v.name))||voiceMap.A);
+    voiceMap.B=take(pool.find(v=>!used.has(v.name))||voiceMap.N);
+    voiceMap.C=pool.find(v=>!used.has(v.name))||voiceMap.B;
+    voiceMapCount=pool.length;
+  }
+  return voiceMap[spk]||voiceMap.A;
+}
 function mkStoryUtter(line){
   const u=new SpeechSynthesisUtterance(ttsFix(stripQuotes(line.en)));
   u.lang='en-US';
