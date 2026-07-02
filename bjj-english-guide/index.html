@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BJJ English Guide - 柔術英会話ガイド</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f1117;--surface:#1a1d27;--card:#222638;--card-hover:#2a2e44;
+  --accent:#e8443a;--accent-light:#ff6b5e;--accent-dark:#b8342c;
+  --text:#e8e8ed;--text-muted:#8b8fa3;--text-dim:#555a6e;
+  --border:#2e3247;--green:#34c759;--blue:#5ac8fa;--yellow:#ffd60a;
+  --radius:12px;--shadow:0 4px 24px rgba(0,0,0,.4);
+}
+html{font-size:16px;scroll-behavior:smooth}
+body{font-family:'Segoe UI','Hiragino Sans',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
+
+/* Header */
+.header{background:linear-gradient(135deg,#1a1d27 0%,#2a1a1a 100%);border-bottom:1px solid var(--border);padding:16px 24px;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px)}
+.header-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.logo{display:flex;align-items:center;gap:12px}
+.logo-icon{width:40px;height:40px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:#fff}
+.logo h1{font-size:1.25rem;font-weight:700;letter-spacing:.5px}
+.logo h1 span{color:var(--accent-light);font-weight:400;font-size:.85rem;margin-left:8px}
+.header-controls{display:flex;align-items:center;gap:12px}
+.mode-toggle{display:flex;background:var(--card);border-radius:8px;overflow:hidden;border:1px solid var(--border)}
+.mode-btn{padding:8px 16px;border:none;background:transparent;color:var(--text-muted);cursor:pointer;font-size:.85rem;transition:.2s}
+.mode-btn.active{background:var(--accent);color:#fff}
+.progress-badge{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.8rem;color:var(--text-muted);display:flex;align-items:center;gap:6px}
+.progress-badge .num{color:var(--green);font-weight:700}
+
+/* Layout */
+.container{max-width:1200px;margin:0 auto;padding:20px 24px;display:flex;gap:24px;min-height:calc(100vh - 80px)}
+.sidebar{width:260px;flex-shrink:0;position:sticky;top:96px;align-self:flex-start;max-height:calc(100vh - 116px);overflow-y:auto}
+.main{flex:1;min-width:0}
+
+/* Sidebar */
+.nav-list{display:flex;flex-direction:column;gap:4px}
+.nav-item{padding:10px 14px;border-radius:var(--radius);cursor:pointer;transition:.2s;border:1px solid transparent;display:flex;align-items:center;gap:10px;font-size:.88rem}
+.nav-item:hover{background:var(--card);border-color:var(--border)}
+.nav-item.active{background:var(--card);border-color:var(--accent);color:var(--accent-light)}
+.nav-item .nav-num{width:24px;height:24px;border-radius:6px;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;flex-shrink:0}
+.nav-item.active .nav-num{background:var(--accent);color:#fff}
+.nav-item .nav-label{flex:1}
+.nav-item .nav-count{font-size:.75rem;color:var(--text-dim)}
+.nav-item .nav-check{color:var(--green);font-size:.8rem;display:none}
+.nav-item.completed .nav-check{display:inline}
+
+/* Section Header */
+.section-header{margin-bottom:24px}
+.section-header h2{font-size:1.5rem;font-weight:700;margin-bottom:4px}
+.section-header .subtitle{color:var(--text-muted);font-size:.9rem}
+.section-header .section-desc{color:var(--text-dim);font-size:.85rem;margin-top:8px;line-height:1.7}
+
+/* Cards - Study Mode */
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;cursor:pointer;transition:.25s;position:relative;overflow:hidden}
+.card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:var(--shadow)}
+.card.revealed{border-color:var(--green)}
+.card .card-term{font-size:1.1rem;font-weight:700;color:var(--accent-light);margin-bottom:6px}
+.card .card-hint{font-size:.8rem;color:var(--text-dim);margin-bottom:12px}
+.card .card-answer{max-height:0;overflow:hidden;transition:max-height .4s ease;opacity:0}
+.card.revealed .card-answer{max-height:600px;opacity:1;transition:max-height .4s ease,opacity .3s .1s}
+.card .card-meaning{font-size:1rem;font-weight:600;color:var(--text);margin-bottom:8px;padding-top:12px;border-top:1px solid var(--border)}
+.card .card-detail{font-size:.85rem;color:var(--text-muted);line-height:1.7}
+.card .card-tap{position:absolute;bottom:12px;right:16px;font-size:.7rem;color:var(--text-dim);transition:.2s}
+.card.revealed .card-tap{opacity:0}
+.card .card-check{position:absolute;top:12px;right:14px;width:22px;height:22px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.7rem;transition:.2s}
+.card.learned .card-check{border-color:var(--green);background:var(--green);color:#fff}
+
+/* Table - Reference Mode */
+.ref-table{width:100%;border-collapse:separate;border-spacing:0;background:var(--card);border-radius:var(--radius);overflow:hidden;border:1px solid var(--border)}
+.ref-table th{background:var(--surface);padding:12px 16px;text-align:left;font-size:.8rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border)}
+.ref-table td{padding:12px 16px;border-bottom:1px solid var(--border);font-size:.88rem;vertical-align:top}
+.ref-table tr:last-child td{border-bottom:none}
+.ref-table tr:hover td{background:var(--card-hover)}
+.ref-table .col-term{font-weight:700;color:var(--accent-light);min-width:160px}
+.ref-table .col-meaning{color:var(--text);min-width:140px}
+.ref-table .col-detail{color:var(--text-muted);font-size:.83rem;line-height:1.6}
+
+/* Long text cards */
+.long-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:16px;cursor:pointer;transition:.2s}
+.long-card:hover{border-color:var(--accent)}
+.long-card.revealed{border-color:var(--green)}
+.long-card .lc-title{font-size:1.05rem;font-weight:700;color:var(--accent-light);margin-bottom:4px}
+.long-card .lc-sub{font-size:.85rem;color:var(--text-muted);margin-bottom:10px}
+.long-card .lc-en{background:var(--surface);border-radius:8px;padding:14px 16px;font-size:.88rem;color:var(--blue);line-height:1.7;margin-bottom:10px;border-left:3px solid var(--accent)}
+.long-card .lc-jp{max-height:0;overflow:hidden;opacity:0;transition:max-height .4s ease,opacity .3s .1s}
+.long-card.revealed .lc-jp{max-height:400px;opacity:1}
+.long-card .lc-jp-inner{background:var(--surface);border-radius:8px;padding:14px 16px;font-size:.85rem;color:var(--text-muted);line-height:1.7;border-left:3px solid var(--green);margin-top:8px}
+.long-card .lc-tap{font-size:.7rem;color:var(--text-dim);text-align:right;margin-top:8px}
+.long-card.revealed .lc-tap{opacity:0}
+
+/* Search */
+.search-bar{margin-bottom:20px}
+.search-bar input{width:100%;padding:12px 16px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:.9rem;outline:none;transition:.2s}
+.search-bar input:focus{border-color:var(--accent)}
+.search-bar input::placeholder{color:var(--text-dim)}
+
+/* Stats Bar */
+.stats-bar{display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 16px;font-size:.8rem;color:var(--text-muted);display:flex;align-items:center;gap:6px}
+.stat .stat-val{font-weight:700;font-size:1rem}
+.stat.red .stat-val{color:var(--accent-light)}
+.stat.green .stat-val{color:var(--green)}
+.stat.blue .stat-val{color:var(--blue)}
+
+/* Reset button */
+.reset-btn{background:transparent;border:1px solid var(--border);color:var(--text-muted);padding:6px 14px;border-radius:6px;cursor:pointer;font-size:.78rem;transition:.2s}
+.reset-btn:hover{border-color:var(--accent);color:var(--accent-light)}
+
+/* Speech button */
+.speak-btn{background:var(--surface);border:1px solid var(--border);color:var(--text-muted);width:32px;height:32px;border-radius:50%;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:.2s;flex-shrink:0;font-size:1rem;line-height:1;padding:0}
+.speak-btn:hover{border-color:var(--blue);color:var(--blue);background:rgba(90,200,250,.1)}
+.speak-btn.speaking{border-color:var(--accent-light);color:var(--accent-light);background:rgba(232,68,58,.15);animation:pulse-speak 1s ease-in-out infinite}
+@keyframes pulse-speak{0%,100%{opacity:1}50%{opacity:.5}}
+.speak-btn svg{width:16px;height:16px;fill:currentColor}
+.card-top-row{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.card-top-row .card-term{flex:1}
+.lc-en-row{display:flex;align-items:flex-start;gap:8px}
+.lc-en-row .lc-en{flex:1}
+.ref-speak{vertical-align:middle;margin-left:4px}
+
+/* Mobile */
+@media(max-width:900px){
+  .container{flex-direction:column}
+  .sidebar{width:100%;position:static;max-height:none;overflow:visible}
+  .nav-list{flex-direction:row;flex-wrap:wrap;gap:6px}
+  .nav-item{padding:8px 12px;font-size:.8rem}
+  .nav-item .nav-label{display:none}
+  .nav-item .nav-num{width:28px;height:28px;font-size:.75rem}
+  .nav-item .nav-count{display:none}
+  .cards-grid{grid-template-columns:1fr}
+  .header-inner{flex-direction:column;align-items:flex-start}
+}
+@media(max-width:600px){
+  .container{padding:12px}
+  .header{padding:12px 16px}
+  .ref-table{font-size:.82rem}
+  .ref-table th,.ref-table td{padding:8px 10px}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-icon">柔</div>
+      <h1>BJJ English Guide<span>柔術英会話ガイド</span></h1>
+    </div>
+    <div class="header-controls">
+      <div class="progress-badge">
+        学習済: <span class="num" id="globalProgress">0</span> / <span id="globalTotal">0</span>
+      </div>
+      <div class="mode-toggle">
+        <button class="mode-btn active" data-mode="study" onclick="setMode('study')">学習モード</button>
+        <button class="mode-btn" data-mode="ref" onclick="setMode('ref')">一覧モード</button>
+      </div>
+      <button class="reset-btn" onclick="resetProgress()">リセット</button>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="sidebar">
+    <nav class="nav-list" id="navList"></nav>
+  </div>
+  <div class="main" id="mainContent"></div>
+</div>
+
+<script>
+const DATA = [
+  {
+    id:'vocab',title:'基本語彙',subtitle:'Basic BJJ Vocabulary',
+    desc:'柔術コミュニティで日常的に使われる基本用語。日本語やポルトガル語からの借用語も多く含まれる。',
+    type:'term',
+    items:[
+      {term:'Oss (Osu)',meaning:'了解、こんにちは、ありがとう',detail:'BJJにおいて最も汎用性の高い言葉。挨拶、同意、敬意の表明、または困難に耐える精神を示す言葉として用いられる。'},
+      {term:'Gi / No-Gi',meaning:'道着（ギ）/ ノーギ',detail:'日本語の「稽古着」に由来する。Kimonoと呼ばれることもあるが、Giが定着している。No-Giはラッシュガード等で行う練習を指す。'},
+      {term:'Mat',meaning:'マット、畳',detail:'練習を行う領域。神聖な場所とされ、マットに上がる際、降りる際はお辞儀をするのが普遍的なエチケット。'},
+      {term:'Professor / Coach',meaning:'先生、インストラクター',detail:'黒帯の指導者をProfessor、それ以下の帯の指導者をCoachと呼ぶことが一般的。'},
+      {term:'Roll / Rolling',meaning:'スパーリング',detail:'BJJにおける実戦形式の練習。単なる「Fight」ではなく、技術を試し合う流動的なプロセスを指す。'},
+      {term:'Drill',meaning:'打ち込み、反復練習',detail:'筋肉の記憶（マッスルメモリー）を構築するために、特定の技術を何度も反復する練習プロセス。'},
+      {term:'Creonte',meaning:'裏切り者',detail:'カーウソン・グレイシーがギリシャ神話にちなんで名付けた古いスラング。道場を頻繁に移籍する者を指す。'},
+      {term:'Porrada',meaning:'激しい練習、全力でのスパー',detail:'ポルトガル語で「殴り合い」を意味するが、BJJでは全力を尽くしてハードに練習する姿勢を指す。'}
+    ]
+  },
+  {
+    id:'greetings',title:'挨拶・エチケット',subtitle:'Greetings & Etiquette',
+    desc:'ゲストが道場に到着した際の初期対応。歓迎、施設案内、衛生管理に関する表現。',
+    type:'phrase',
+    items:[
+      {term:'歓迎と確認',en:'"Welcome to our academy. Are you dropping in for today\'s class?"',meaning:'アカデミーへの歓迎の意を示し、本日のクラスへのドロップイン（出稽古）であるかを確認する。'},
+      {term:'経歴の確認',en:'"Where do you usually train, and what belt are you?"',meaning:'相手の所属と帯色を確認し、スパーリングのペアリングや指導のレベルを調整する。'},
+      {term:'事務手続き',en:'"Please sign the waiver here."',meaning:'免責同意書（Waiver）への署名を促す。法的なリスク管理として必須の表現。'},
+      {term:'施設案内',en:'"The changing room and restrooms are over there."',meaning:'更衣室とトイレの場所を案内する。'},
+      {term:'エチケット',en:'"Please bow before stepping on or off the mat."',meaning:'マットへの出入り時にお辞儀をするという、BJJの伝統的な敬意の作法を伝える。'},
+      {term:'衛生管理',en:'"Please wear footwear when off the mats to prevent infections."',meaning:'感染症予防のため、マット外での履物着用を義務付ける。'},
+      {term:'身だしなみ',en:'"Make sure your finger and toe nails are trimmed short."',meaning:'爪が長いと相手を傷つけるため、短く切るよう促す。安全管理の基本。'}
+    ]
+  },
+  {
+    id:'body',title:'身体部位',subtitle:'Anatomical Body Parts',
+    desc:'技の説明において、関節や骨の正確な位置を指示するための身体部位の英単語。',
+    type:'term',
+    items:[
+      {term:'Head / Forehead',meaning:'頭 / 額',detail:''},
+      {term:'Neck / Throat',meaning:'首 / 喉、気管',detail:''},
+      {term:'Shoulder',meaning:'肩',detail:''},
+      {term:'Shoulder Blade (Scapula)',meaning:'肩甲骨',detail:''},
+      {term:'Armpit',meaning:'脇の下',detail:''},
+      {term:'Chest / Ribs',meaning:'胸 / 肋骨',detail:''},
+      {term:'Belly / Torso',meaning:'腹 / 胴体',detail:''},
+      {term:'Back / Spine',meaning:'背中 / 脊椎',detail:''},
+      {term:'Arm / Forearm',meaning:'腕 / 前腕',detail:''},
+      {term:'Elbow / Bicep',meaning:'肘 / 上腕二頭筋',detail:''},
+      {term:'Wrist / Hand',meaning:'手首 / 手',detail:''},
+      {term:'Fingers / Thumb',meaning:'指 / 親指',detail:''},
+      {term:'Hips / Pelvis',meaning:'股関節、腰 / 骨盤',detail:''},
+      {term:'Thigh / Hamstring',meaning:'太もも / ハムストリング',detail:''},
+      {term:'Knee / Shin',meaning:'膝 / 脛（すね）',detail:''},
+      {term:'Calf',meaning:'ふくらはぎ',detail:''},
+      {term:'Ankle / Heel',meaning:'足首 / 踵（かかと）',detail:''},
+      {term:'Foot / Toes',meaning:'足 / 足の指',detail:''},
+      {term:'Joint / Ligament',meaning:'関節 / 靭帯',detail:''},
+      {term:'Instep (Laces)',meaning:'足の甲',detail:''}
+    ]
+  },
+  {
+    id:'injuries',title:'怪我・コンディション',subtitle:'Injuries & Conditions',
+    desc:'スパーリング前に自身の怪我や疲労状態を共有し、事故を未然に防ぐための表現。',
+    type:'phrase',
+    items:[
+      {term:'怪我の申告',en:'"I have a slight injury on my right shoulder, so please go easy on that side."',meaning:'右肩を痛めているため、そちら側への攻撃は手加減してほしい旨を伝える。'},
+      {term:'関節の不安',en:'"My left knee is a bit tweaked, so I might tap early to leg locks."',meaning:'左膝に違和感があるため、足関節技には早めにタップすることを事前告知する。'},
+      {term:'スタミナの欠如',en:'"I\'m feeling gassed today."',meaning:'「Gassed」はスタミナ切れ（ガス欠）を意味するスラング。疲労困憊であることを伝える。'},
+      {term:'特有の症状',en:'Cauliflower ear / Staph infection / Ringworm',meaning:'湧き耳 / ブドウ球菌感染 / 白癬・水虫。BJJで発症しやすい外傷や皮膚感染症。これらがある場合は練習への参加を控えるべき。'}
+    ]
+  },
+  {
+    id:'class',title:'クラス進行',subtitle:'Class Management & Drills',
+    desc:'ウォームアップ、マット運動、ドリルの進行とパートナーワークの管理に使う指示表現。',
+    type:'phrase',
+    items:[
+      {term:'開始の合図',en:'"Let\'s start with the warm-up. Jog in a circle."',meaning:'ウォームアップを始めましょう。円になってジョギングしてください。'},
+      {term:'マット運動',en:'"Forward rolls and backward rolls down the mat."',meaning:'マットの端まで前転と後転を行ってください。'},
+      {term:'受け身',en:'"Breakfalls. Tuck your chin to protect your head."',meaning:'受け身。頭を守るために顎を引いてください。'},
+      {term:'エビ（ヒップエスケープ）',en:'"Shrimping (Hip escapes). Plant your feet and move your hips away."',meaning:'エビ。足を床につき、腰を遠ざけるように動かしてください。'},
+      {term:'その他の動作',en:'"Bear crawls and sprawls."',meaning:'ベアクロールとスプロール。'},
+      {term:'ペアの結成',en:'"Partner up." / "Grab a partner."',meaning:'参加者にペアを組むよう促す標準的な表現。'},
+      {term:'役割の指定',en:'"One person on top, one person on the bottom."',meaning:'どちらが上のポジション（トップ）、どちらが下のポジション（ボトム）をとるかを指定する。'},
+      {term:'受け手の態度',en:'"Uke, please provide a realistic but cooperative reaction."',meaning:'技を受ける側（Uke）に対し、完全に力を抜く（limp noodle）のではなく、適度な抵抗を保ちつつ協力するよう指示する。'},
+      {term:'反復と交代',en:'"Let\'s do three reps each, then switch."',meaning:'それぞれ3回ずつ反復（reps）し、その後役割を交代（switch）するよう指示する。'},
+      {term:'抵抗の追加',en:'"Add a little bit of resistance to check the mechanics."',meaning:'技の構造（メカニクス）を確認するため、受け手に少し抵抗を加えるよう求める。'}
+    ]
+  },
+  {
+    id:'referee',title:'審判コマンド',subtitle:'Referee Commands',
+    desc:'IBJJF等の公式ルールに基づくレフェリーコマンド。ポルトガル語が世界共通で使用される。',
+    type:'phrase',
+    items:[
+      {term:'Combate! (Fight/Start)',en:'腕を前方に伸ばし、下方に振り下ろす。',meaning:'試合やスパーリングの開始、および中断後の再開を指示する。'},
+      {term:'Parou! (Stop/Pause)',en:'両腕を肩の高さに上げ、手のひらを開く。',meaning:'動作の完全な停止。安全確保時、場外への逸脱時、またはタイマー終了時に用いる。'},
+      {term:'Lute! (Penalty/Stalling)',en:'対象選手の胸を指差し、その後拳を肩の高さに上げる。',meaning:'ルーチ。消極的な姿勢（ストーリング）に対する警告やペナルティを与える際に用いる。'},
+      {term:'Falta! (Foul)',en:'（Luteと同様のジェスチャー）',meaning:'重大な反則行為に対するペナルティ宣告。'},
+      {term:'Adjust your gi',en:'両腕を腰の高さで交差させ、下方を指す。',meaning:'乱れた道着を直すよう指示する。'},
+      {term:'Re-tie your belt',en:'仮想の帯を締めるジェスチャーをする。',meaning:'ほどけた帯を締め直すよう指示する。'}
+    ]
+  },
+  {
+    id:'biomech',title:'バイオメカニクス',subtitle:'Biomechanics & Body Mechanics',
+    desc:'「なぜその動きが有効なのか」を伝えるための生体力学的概念と身体操作の表現。',
+    type:'long',
+    items:[
+      {title:'Frames（フレーム：骨格による防御壁）',sub:'骨格構造を利用して相手との間に空間を作る',
+       en:'"Frames are critical to making the space necessary to protect yourself. Use your skeletal structure, not your muscles. Don\'t try to bench press your opponent away. Create a bony shield with your forearms or shins."',
+       jp:'フレームは身を守る空間を作る上で極めて重要です。筋肉ではなく骨格構造を使用してください。相手をベンチプレスのようにはね除けようとせず、前腕や脛を使って骨の盾を作り出します。'},
+      {title:'Frames 実践指示',sub:'フレームの具体的な使い方',
+       en:'"Frame against their neck and far hip. Keep your elbows connected to your ribs to prevent your frame from collapsing."',
+       jp:'相手の首と遠い側の腰に対してフレームを作ります。フレームが崩れないよう、肘は肋骨に接着させたままにしてください。'},
+      {title:'Levers（レバー：てこの原理による力の増幅）',sub:'力を増幅させる装置（force multipliers）',
+       en:'"Levers are force multipliers. To control an arm or leg effectively, you must access the end of the lever and control at least two of the three primary joints (shoulder, elbow, wrist)."',
+       jp:'レバーは力を増幅させます。腕や脚を効果的にコントロールするには、レバーの末端にアクセスし、3つの主要な関節のうち少なくとも2つを制御しなければなりません。'},
+      {title:'Wedges（ウェッジ：楔による固定）',sub:'相手の動きを阻害する、またはフレームをこじ開ける',
+       en:'"Use wedges to block the opponent\'s movement or pry open their frames. Placing your hand next to their hip is a blocking wedge that prevents them from recovering guard."',
+       jp:'相手の動きをブロックしたり、フレームをこじ開けたりするために楔（ウェッジ）を使います。相手の腰の横に手を置くことは、ガードの回復を防ぐブロッキング・ウェッジとなります。'},
+      {title:'Base（ベース：土台と重心）',sub:'ポジションの安定性を確保する基盤',
+       en:'"Base is the foundation and stability of your position. Widen your knees and keep your center of gravity low so you cannot be swept easily."',
+       jp:'ベースとは、ポジションの土台であり安定性です。膝を広く開き、重心を低く保つことで、簡単にスイープされないようにします。'},
+      {title:'Posture（ポスチャー：姿勢と脊椎の整列）',sub:'身体の整列状態を維持する',
+       en:'"Posture is the alignment of your body. Keep your spine straight, your head up, and avoid looking down. From the bottom, your goal is to break their posture by pulling with your legs, not just your arms."',
+       jp:'ポスチャーとは身体の整列状態です。背骨をまっすぐにし、頭を上げ、下を向かないようにします。下のポジションからは、腕だけでなく脚を使って引くことで、相手のポスチャーを崩すことが目標となります。'},
+      {title:'Pressure（プレッシャー：圧力の集中）',sub:'体重をかけて動きを制限する',
+       en:'"Pressure is the application of weight to restrict movement. Drop your hips and make them heavy. Apply cross-face pressure by driving your shoulder under their jaw to misalign their spine."',
+       jp:'プレッシャーとは、動きを制限するために体重をかけることです。腰を落として重くしてください。相手の顎の下に肩を押し込むクロスフェイスのプレッシャーをかけ、相手の脊椎の直列を崩します。'},
+      {title:'Active Toes（ライブトウ / 立てた足指）',sub:'前方への推進力と機動力を生む',
+       en:'"Keep your toes active on the mat. Don\'t rest on the laces (seal feet). Driving off your live toes gives you mobility and forward pressure."',
+       jp:'足の甲を寝かせるのではなく、足の指をマットに立てておく状態。これにより、前方への推進力と機動力が生まれ、相手に強力な圧力をかけることができる。'},
+      {title:'Heavy Hips（重い腰）',sub:'体重の焦点を一点に絞るブレーディング技術',
+       en:'"Sink your weight down directly into their chest. Open your hips and use one hip as a focal point to blade your pressure. Make them carry your weight."',
+       jp:'筋肉の力で押さえつけるのではなく、股関節を開き、体重の焦点を一点に絞る（ブレーディング）ことで、相手に全体重を背負わせる技術。'},
+      {title:'Stay Tight / Elbows In（タイトに保つ / 肘を閉じる）',sub:'隙をなくし関節技を防ぐ防御の基本',
+       en:'"Stay tight. Keep your elbows glued to your ribs like a T-Rex. If your elbow leaves your body, your arm is exposed to submissions."',
+       jp:'隙をなくし、関節技を防ぐための防御の基本姿勢。肘が体幹から離れると、レバーとして利用され、アームバー等の危険に晒される。'},
+      {title:'Peel the Hand（グリップを剥がす）',sub:'チョーク防御時の末端からの剥がし方',
+       en:'"When defending a choke, don\'t just pull their forearm. Peel the hand starting from the thumb or the knuckles to break the grip."',
+       jp:'チョークを防御する際、手首や前腕を引くのではなく、親指や拳の関節といった末端からグリップを物理的に剥がす動作。'}
+    ]
+  },
+  {
+    id:'positions',title:'ポジション',subtitle:'Positional Hierarchy',
+    desc:'「Position before submission（極めの前にポジションあり）」の原則に基づく主要ポジション。',
+    type:'long',
+    items:[
+      {title:'Side Control / Side Mount（サイドコントロール）',sub:'横四方固め — 有利な上のポジション',
+       en:'"A dominant top position where you are perpendicular to the opponent, chest-to-chest. Keep shoulder pressure on the jawline while isolating their near arm. From the bottom, you must establish frames on the near hip and far shoulder, then shrimp to recover guard."',
+       jp:'相手と垂直になり、胸と胸を合わせる有利な上のポジションです。顎のラインに肩のプレッシャーをかけながら、手前の腕を孤立させます。下の立場からは、手前の腰と遠い側の肩にフレームを作り、エビをしてガードを回復しなければなりません。'},
+      {title:'Mount / Full Mount（マウントポジション）',sub:'「柔術の王様」— 最も強力なトップポジション',
+       en:'"Considered the \'King of Jiu-Jitsu.\' You sit on top of the opponent\'s torso with your knees wide and hips heavy. Your goal is to maintain posture, control the head, and isolate arms for submissions. From the bottom, trap an arm and a leg to initiate a bridge and roll (Upa) escape."',
+       jp:'「柔術の王様」とみなされるポジションです。相手の胴体の上に座り、膝を広く開き、腰を重くします。目標は姿勢を保ち、頭をコントロールし、極め技のために腕を孤立させることです。下の立場からは、腕と脚をトラップして、ブリッジ＆ロール（ウパ）によるエスケープを開始します。'},
+      {title:'Back Control（バックコントロール）',sub:'BJJにおいて最も有利なポジション',
+       en:'"The most dominant position in BJJ. You control the opponent from behind using your legs as hooks inside their thighs and a seatbelt grip (one arm over the shoulder, one under the armpit) to manage the upper body. Keep your chest glued to their back; space allows them to escape."',
+       jp:'BJJにおいて最も有利なポジションです。背後から両脚を太ももの内側へのフックとして使い、上半身を管理するためにシートベルトグリップ（片腕は肩越し、片腕は脇の下）を用いてコントロールします。胸を相手の背中に密着させてください。隙間ができるとエスケープを許してしまいます。'}
+    ]
+  },
+  {
+    id:'guards',title:'ガードシステム',subtitle:'Guard Systems',
+    desc:'下からの攻撃と防御の要。現代柔術における多様なガードの目的と足の配置。',
+    type:'long',
+    items:[
+      {title:'Closed Guard（クローズドガード）',sub:'両脚で相手の腰をロックする基本ガード',
+       en:'"Your legs are wrapped and locked around your opponent\'s waist. The core strategy is to break their posture and base. Do not just pull with your arm strength; use your legs and core to pull their weight forward. This off-balances them and opens up sweeps and submissions."',
+       jp:'両脚を相手の腰に巻き付けてロックします。核となる戦略は、相手の姿勢とベースを崩すことです。腕の力だけで引くのではなく、脚と体幹を使って相手の体重を前方に引き出します。これによりバランスが崩れ、スイープや極め技への展開が開けます。'},
+      {title:'Half Guard / Deep Half Guard（ハーフガード）',sub:'相手の片脚をトラップするガード',
+       en:'"You have one of your opponent\'s legs trapped between yours. The bottom player must use an underhook and a knee shield to prevent cross-facing. If you transition to Deep Half, you move entirely underneath their center of gravity to destabilize their base, opening up rollover sweeps and back takes."',
+       jp:'相手の片脚を自分の両脚で挟んでトラップします。下のプレイヤーは、クロスフェイスを防ぐためにアンダーフック（脇差し）とニーシールド（膝の盾）を使わなければなりません。ディープハーフに移行する場合は、相手の重心の完全に下へ潜り込み、ベースを不安定にして、ロールオーバースイープやバックテイクへの展開を開きます。'},
+      {title:'Spider Guard（スパイダーガード）',sub:'袖をコントロールし足を相手の上腕に配置するガード',
+       en:'"An open guard where you control the sleeves with a pocket grip and place your feet on their biceps. This stretches the opponent out and allows you to constantly off-balance them. Proper foot angle and tension are crucial to prevent the guard pass."',
+       jp:'ポケットグリップで袖をコントロールし、足を相手の上腕二頭筋に配置するオープンガードです。これにより相手の身体を伸ばし、絶えずバランスを崩すことが可能になります。パスガードを防ぐためには、適切な足の角度と張力が極めて重要です。'},
+      {title:'De La Riva Guard（デラヒーバガード）',sub:'相手の脚の外側からフックするガード',
+       en:'"You hook one leg around the outside of the opponent\'s lead leg while controlling their ankle and sleeve. This guard focuses heavily on lower body control and is a primary setup for taking the back or executing the sickle sweep."',
+       jp:'相手の前の脚の外側から片脚をフックし、同時に足首と袖をコントロールします。このガードは下半身の制御に重きを置いており、バックテイクやシックルスイープを実行するための主要なセットアップとなります。'}
+    ]
+  },
+  {
+    id:'techniques',title:'テクニック',subtitle:'Sweeps, Passes & Submissions',
+    desc:'個別の技術をデモンストレーションしながら英語で解説する実践的スクリプト。',
+    type:'long',
+    items:[
+      {title:'Scissor Sweep（シザースイープ）',sub:'スイープ — クローズドガードからマウントを奪取',
+       en:'"Establish a collar and sleeve grip. Open your guard and shrimp slightly to create an angle. Place your top shin across their belt line. Pull them forward to break their balance, then scissor your legs—chop the bottom leg while sweeping with the top leg—to end up in the mount."',
+       jp:'襟と袖のグリップを作ります。ガードを開き、少しエビをして角度を作ります。上のすねを相手のベルトラインに当てます。相手を前に引いてバランスを崩し、脚をハサミのように動かして—下の脚を払いながら上の脚で掃くようにして—マウントを取ります。'},
+      {title:'Hip Bump Sweep（ヒップバンプスイープ）',sub:'スイープ — 上体を起こしてバランスを崩す',
+       en:'"When you can\'t break their posture in closed guard, open your legs, post on your hand, and sit up quickly. Trap their arm above the elbow, thrust your hips forward to knock them off-balance, and sweep them onto their back to achieve the mount."',
+       jp:'クローズドガードで相手の姿勢を崩せない時、脚を開き、手をついて素早く上体を起こします。相手の肘より上をトラップし、腰を前方に突き出してバランスを崩させ、背中から倒してマウントを奪取します。'},
+      {title:'Double Leg Takedown（両足タックル）',sub:'テイクダウン — レベルチェンジから押し込む',
+       en:'"Change your elevation to get below their defense. Take a deep penetration step. Wrap both arms around their legs behind the knees, and drive diagonally. Keep your head up and outside their ribs to avoid the guillotine choke."',
+       jp:'ディフェンスの下に入るために姿勢を低く（レベルチェンジ）します。深く踏み込みます。両腕を相手の両膝の後ろに回し、斜めに押し込みます。ギロチンチョークを防ぐため、頭は上げ、相手の肋骨の外側に置いてください。'},
+      {title:'Knee Slice / Knee Cut（ニースライス）',sub:'パスガード — すねを斜めに押し当てて通過',
+       en:'"Drive your shin diagonally across their thigh. Get a deep underhook on the far side to prevent them from taking your back. Keep your chest heavy, slide your knee completely through to the mat, and establish side control."',
+       jp:'すねを相手の太ももに斜めに押し当てます。バックを取られないように、逆側に深いアンダーフック（脇差し）を取ります。胸の重さを保ち、膝を完全にマットまで滑り込ませて、サイドコントロールを確立します。'},
+      {title:'Torreando / Bullfighter Pass（トレアドールパス）',sub:'パスガード — 左右の動きでフックを避ける',
+       en:'"Grip their pants near the knees. Step to one side and employ rapid side-to-side movement to avoid their hooks. Push their legs away and circle around their guard to secure side control. Keep your posture upright."',
+       jp:'膝付近のズボンをグリップします。片側にステップし、素早い左右の動きを用いて相手のフックを避けます。脚を押し退け、ガードの外側を回り込んでサイドコントロールを確保します。姿勢は直立を保ってください。'},
+      {title:'Triangle Choke（三角絞め）',sub:'サブミッション — 脚で首と片腕を捕らえて絞める',
+       en:'"Push one arm in and pull the other arm out (one in, one out). Shoot your hips up to catch their neck and one arm. Lock your legs by bringing your calf over your ankle. Cut the angle—look into their ear—pull the head down, and squeeze your knees together to restrict the blood flow to the brain."',
+       jp:'片腕を押し込み、もう片腕を引き出します。腰を跳ね上げ、相手の首と片腕を捕らえます。ふくらはぎを足首に乗せて脚をロックします。角度を変え—相手の耳を覗き込むように—頭を引き下げ、両膝を強く締めて脳への血流を制限します。'},
+      {title:'Armbar / Juji-Gatame（腕十字）',sub:'サブミッション — 肘関節を過伸展させる',
+       en:'"Isolate the arm. Secure a two-on-one grip. Swing your leg over their head to break their posture. Pinch your knees tightly. Control their wrist with the thumb pointing up, and slowly elevate your hips to hyperextend the elbow joint."',
+       jp:'腕を孤立させます。ツーオンワンのグリップを確保します。脚を相手の頭を越すように回して姿勢を崩します。両膝をしっかり締めます。親指が上を向くように手首をコントロールし、ゆっくりと腰を上げて肘関節を過伸展させます。'},
+      {title:'Kimura（キムラロック / 腕絡み）',sub:'サブミッション — フィギュアフォーグリップで肩を極める',
+       en:'"Control the wrist. Sit up, reach your other arm over their shoulder, and thread it through to grab your own wrist, creating a figure-four grip. Fall back, keep their arm bent at a 90-degree angle, and rotate their hand toward the back of their head."',
+       jp:'手首をコントロールします。上体を起こし、もう片方の腕を肩越しに伸ばして通し、自分の手首を掴んでフィギュアフォー（4の字）グリップを作ります。後ろに倒れ、腕を90度に曲げたまま、手を後頭部の方向へ回転させます。'},
+      {title:'Rear Naked Choke / RNC（裸絞め）',sub:'サブミッション — バックから首を絞める最強の極め',
+       en:'"From back control, thread one arm around the neck, hand to bicep, and place the opposite hand behind their head. Keep your head tight to theirs and squeeze using your back and shoulders. Do not crank the neck; compress smoothly."',
+       jp:'バックコントロールから、片腕を首に回して上腕二頭筋を掴み、反対の手を相手の後頭部に置きます。自分の頭を相手の頭に密着させ、背中と肩を使って絞め上げます。首を捻らず、滑らかに圧迫してください。'}
+    ]
+  },
+  {
+    id:'sparring',title:'スパーリング',subtitle:'Sparring Communication',
+    desc:'スパーリングの誘い方、強度の設定、安全管理、終了後のコミュニケーション。',
+    type:'phrase',
+    items:[
+      {term:'誘いの表現',en:'"Would you like to roll?" / "Care for a round?"',meaning:'スパーリングしませんか？ / 1ラウンドやりませんか？'},
+      {term:'強度の設定',en:'"Let\'s go light. Maybe around 70%?"',meaning:'軽く行きましょう。70%くらいの力でどうですか？'},
+      {term:'フロースパー',en:'"Can we flow roll? I want to focus on movement and transitions without muscling it."',meaning:'フロースパー（力に頼らず動きを止めないスパーリング）をしませんか？動きとトランジション（移行）に集中したいんです。'},
+      {term:'ハードな練習',en:'"I\'m training for a competition, so can we go hard (porrada)?"',meaning:'試合に向けて練習しているので、ハードに（ポラーダで）やってもいいですか？'},
+      {term:'タップの重要性',en:'"Remember to tap early and tap often. There is no ego on the mat. Tapping is just learning."',meaning:'早くタップし、頻繁にタップすることを忘れないでください。マットの上にエゴ（プライド）は不要です。タップすることは学ぶプロセスに過ぎません。'},
+      {term:'安全な極め方',en:'"If you catch a joint lock, apply it slowly to give your partner time to tap."',meaning:'関節技を捕らえたら、パートナーがタップする時間を与えるためにゆっくり極めてください。'},
+      {term:'禁止事項',en:'"Always grab 3 or more fingers at a time, never less. Finger bending is illegal."',meaning:'指を掴む時は常に3本以上をまとめて掴み、それ以下は避けてください。指を曲げる行為は反則です。'},
+      {term:'安全確認と謝罪',en:'"Are you okay? Did I catch you with a stray knee?" / "Sorry, that was my fault."',meaning:'大丈夫ですか？ 流れ弾の膝が当たりましたか？ / ごめんなさい、私のミスです。'},
+      {term:'リセットの指示',en:'"We are getting too close to the wall. Let\'s reset in the center. Keep the same position."',meaning:'壁に近づきすぎています。中央でリセットしましょう。同じポジションのままで。'},
+      {term:'ロール終了後の称賛',en:'"Thank you for the roll. Your top pressure is incredibly heavy, and that scissor sweep was perfectly timed."',meaning:'スパーリングありがとうございました。あなたの上からのプレッシャーは信じられないほど重く、シザースイープのタイミングも完璧でした。'}
+    ]
+  },
+  {
+    id:'magic',title:'魔法のフレーズ',subtitle:'Magic Phrases & Feedback',
+    desc:'アドバイスを求める「魔法の質問」と、的確なフィードバックを与える表現。',
+    type:'phrase',
+    items:[
+      {term:'最も簡単な方法を聞く',en:'"What is the easiest way to escape this position?"',meaning:'このポジションからエスケープする「最も簡単な」方法は何ですか？'},
+      {term:'成功率の高い技を聞く',en:'"What is your highest percentage submission from here?"',meaning:'ここから「最も成功率（ハイ・パーセンテージ）の高い」サブミッションは何ですか？'},
+      {term:'十八番を聞く',en:'"What is your bread and butter sweep from the open guard?"',meaning:'オープンガードからの「あなたの十八番（ブレッド・アンド・バター）」のスイープは何ですか？'},
+      {term:'力の使いすぎ',en:'"You are using too much strength. Try to rely more on leverage and body mechanics."',meaning:'力を使いすぎています。てこの原理と生体力学にもっと頼ってみてください。'},
+      {term:'呼吸とリラックス',en:'"Don\'t hold your breath. Relax your face and your grips unless you need them to control the posture."',meaning:'息を止めないでください。姿勢をコントロールする必要がある時以外は、顔の表情とグリップの力を抜いてリラックスしましょう。'},
+      {term:'ポジション優先',en:'"Remember: Position before submission. Secure the dominant position first, then look for the attack."',meaning:'忘れないでください。極めの前にポジションです。まず有利なポジションを安定させてから、攻撃を探しましょう。'}
+    ]
+  }
+];
+
+let currentCategory = 'vocab';
+let mode = 'study';
+let learned = JSON.parse(localStorage.getItem('bjj_learned') || '{}');
+
+const SPEAK_SVG = '<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>';
+
+function stripQuotes(text) {
+  return text.replace(/^[""“]+|[""”]+$/g, '').trim();
+}
+
+function getEnglishText(item) {
+  if (item.en) return stripQuotes(item.en);
+  if (item.term) return item.term;
+  return '';
+}
+
+function speak(e, text) {
+  e.stopPropagation();
+  const clean = stripQuotes(text);
+  if (!clean) return;
+  window.speechSynthesis.cancel();
+  const btn = e.currentTarget;
+  document.querySelectorAll('.speak-btn.speaking').forEach(b => b.classList.remove('speaking'));
+  btn.classList.add('speaking');
+  const utter = new SpeechSynthesisUtterance(clean);
+  utter.lang = 'en-US';
+  utter.rate = 0.85;
+  const voices = window.speechSynthesis.getVoices();
+  const enVoice = voices.find(v => v.lang.startsWith('en') && v.name.includes('Google'))
+    || voices.find(v => v.lang.startsWith('en-US'))
+    || voices.find(v => v.lang.startsWith('en'));
+  if (enVoice) utter.voice = enVoice;
+  utter.onend = () => btn.classList.remove('speaking');
+  utter.onerror = () => btn.classList.remove('speaking');
+  window.speechSynthesis.speak(utter);
+}
+
+window.speechSynthesis.getVoices();
+
+function getTotalItems(){return DATA.reduce((s,c)=>s+c.items.length,0)}
+function getLearnedCount(){return Object.keys(learned).length}
+function itemKey(catId,idx){return catId+'_'+idx}
+
+function updateGlobalProgress(){
+  document.getElementById('globalProgress').textContent=getLearnedCount();
+  document.getElementById('globalTotal').textContent=getTotalItems();
+}
+
+function saveLearned(){
+  localStorage.setItem('bjj_learned',JSON.stringify(learned));
+  updateGlobalProgress();
+  renderNav();
+}
+
+function resetProgress(){
+  if(!confirm('学習済みの記録をすべてリセットしますか？'))return;
+  learned={};saveLearned();render();
+}
+
+function setMode(m){
+  mode=m;
+  document.querySelectorAll('.mode-btn').forEach(b=>{
+    b.classList.toggle('active',b.dataset.mode===m);
+  });
+  render();
+}
+
+function renderNav(){
+  const nav=document.getElementById('navList');
+  nav.innerHTML=DATA.map((cat,i)=>{
+    const total=cat.items.length;
+    const done=cat.items.filter((_,j)=>learned[itemKey(cat.id,j)]).length;
+    const completed=done===total;
+    return `<div class="nav-item ${cat.id===currentCategory?'active':''} ${completed?'completed':''}" onclick="selectCategory('${cat.id}')">
+      <span class="nav-num">${i+1}</span>
+      <span class="nav-label">${cat.title}</span>
+      <span class="nav-count">${done}/${total}</span>
+      <span class="nav-check">&#10003;</span>
+    </div>`;
+  }).join('');
+}
+
+function selectCategory(id){
+  currentCategory=id;render();
+}
+
+function toggleCard(catId,idx){
+  const el=document.getElementById('card-'+catId+'-'+idx);
+  if(!el)return;
+  el.classList.toggle('revealed');
+}
+
+function toggleLearned(e,catId,idx){
+  e.stopPropagation();
+  const key=itemKey(catId,idx);
+  if(learned[key])delete learned[key];else learned[key]=1;
+  saveLearned();
+  const card=document.getElementById('card-'+catId+'-'+idx);
+  if(card)card.classList.toggle('learned',!!learned[key]);
+}
+
+function render(){
+  renderNav();
+  const cat=DATA.find(c=>c.id===currentCategory);
+  if(!cat)return;
+
+  const main=document.getElementById('mainContent');
+  const catDone=cat.items.filter((_,j)=>learned[itemKey(cat.id,j)]).length;
+
+  let html=`<div class="section-header">
+    <h2>${cat.title} <span style="font-weight:400;color:var(--text-muted);font-size:1rem">${cat.subtitle}</span></h2>
+    <div class="section-desc">${cat.desc}</div>
+  </div>`;
+
+  html+=`<div class="stats-bar">
+    <div class="stat blue"><span class="stat-val">${cat.items.length}</span> 項目</div>
+    <div class="stat green"><span class="stat-val">${catDone}</span> 学習済</div>
+    <div class="stat red"><span class="stat-val">${cat.items.length-catDone}</span> 未学習</div>
+  </div>`;
+
+  html+=`<div class="search-bar"><input type="text" placeholder="このカテゴリ内を検索..." oninput="filterItems(this.value)"></div>`;
+
+  if(mode==='study'){
+    html+=renderStudyMode(cat);
+  }else{
+    html+=renderRefMode(cat);
+  }
+
+  main.innerHTML=html;
+  updateGlobalProgress();
+}
+
+function renderStudyMode(cat){
+  if(cat.type==='long'){
+    return cat.items.map((item,i)=>{
+      const key=itemKey(cat.id,i);
+      const isLearned=!!learned[key];
+      const speakText = stripQuotes(item.en);
+      return `<div class="long-card ${isLearned?'learned':''}" id="card-${cat.id}-${i}" onclick="toggleCard('${cat.id}',${i})" data-search="${(item.title+item.sub+item.en+item.jp).toLowerCase()}">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div>
+            <div class="lc-title">${item.title}</div>
+            <div class="lc-sub">${item.sub}</div>
+          </div>
+          <div class="card-check" onclick="toggleLearned(event,'${cat.id}',${i})" title="学習済みにする">${isLearned?'&#10003;':''}</div>
+        </div>
+        <div class="lc-en-row">
+          <div class="lc-en">${item.en}</div>
+          <button class="speak-btn" onclick="speak(event,\`${speakText.replace(/`/g,"'")}\`)" title="読み上げ" style="margin-top:12px">${SPEAK_SVG}</button>
+        </div>
+        <div class="lc-jp"><div class="lc-jp-inner">${item.jp}</div></div>
+        <div class="lc-tap">&#9650; クリックで日本語訳を表示</div>
+      </div>`;
+    }).join('');
+  }
+
+  let html=`<div class="cards-grid">`;
+  cat.items.forEach((item,i)=>{
+    const key=itemKey(cat.id,i);
+    const isLearned=!!learned[key];
+    const hasEn=item.en;
+    const speakText = getEnglishText(item);
+    html+=`<div class="card ${isLearned?'learned':''}" id="card-${cat.id}-${i}" onclick="toggleCard('${cat.id}',${i})" data-search="${((item.term||'')+(item.en||'')+(item.meaning||'')+(item.detail||'')).toLowerCase()}">
+      <div class="card-check" onclick="toggleLearned(event,'${cat.id}',${i})" title="学習済みにする">${isLearned?'&#10003;':''}</div>
+      <div class="card-top-row">
+        <div class="card-term">${item.term}</div>
+        ${speakText?`<button class="speak-btn" onclick="speak(event,\`${speakText.replace(/`/g,"'")}\`)" title="読み上げ">${SPEAK_SVG}</button>`:''}
+      </div>
+      ${hasEn?`<div class="card-hint" style="color:var(--blue);font-size:.88rem;line-height:1.5">${item.en}</div>`:''}
+      <div class="card-answer">
+        <div class="card-meaning">${item.meaning}</div>
+        ${item.detail?`<div class="card-detail">${item.detail}</div>`:''}
+      </div>
+      <div class="card-tap">&#9650; クリックで表示</div>
+    </div>`;
+  });
+  html+=`</div>`;
+  return html;
+}
+
+function renderRefMode(cat){
+  if(cat.type==='long'){
+    let html=`<div style="overflow-x:auto"><table class="ref-table">
+      <thead><tr><th>技術・概念</th><th>英語表現</th><th style="width:40px"></th><th>日本語解説</th></tr></thead><tbody>`;
+    cat.items.forEach(item=>{
+      const st=stripQuotes(item.en);
+      html+=`<tr><td class="col-term">${item.title}<br><span style="font-weight:400;color:var(--text-dim);font-size:.78rem">${item.sub}</span></td>
+        <td class="col-detail" style="color:var(--blue)">${item.en}</td>
+        <td><button class="speak-btn ref-speak" onclick="speak(event,\`${st.replace(/`/g,"'")}\`)" title="読み上げ">${SPEAK_SVG}</button></td>
+        <td class="col-detail">${item.jp}</td></tr>`;
+    });
+    html+=`</tbody></table></div>`;
+    return html;
+  }
+
+  const hasEn=cat.items.some(it=>it.en);
+  const hasDetail=cat.items.some(it=>it.detail);
+
+  let html=`<div style="overflow-x:auto"><table class="ref-table"><thead><tr>
+    <th>${cat.type==='phrase'?'状況・目的':'英語用語'}</th>
+    ${hasEn?'<th>英語表現</th>':''}
+    <th style="width:40px"></th>
+    <th>意味・ニュアンス</th>
+    ${hasDetail?'<th>備考</th>':''}
+  </tr></thead><tbody>`;
+
+  cat.items.forEach(item=>{
+    const st=getEnglishText(item);
+    html+=`<tr>
+      <td class="col-term">${item.term}</td>
+      ${hasEn?`<td class="col-detail" style="color:var(--blue)">${item.en||''}</td>`:''}
+      <td><button class="speak-btn ref-speak" onclick="speak(event,\`${st.replace(/`/g,"'")}\`)" title="読み上げ">${SPEAK_SVG}</button></td>
+      <td class="col-meaning">${item.meaning}</td>
+      ${hasDetail?`<td class="col-detail">${item.detail||''}</td>`:''}
+    </tr>`;
+  });
+  html+=`</tbody></table></div>`;
+  return html;
+}
+
+function filterItems(query){
+  const q=query.toLowerCase().trim();
+  document.querySelectorAll('[data-search]').forEach(el=>{
+    el.style.display=!q||el.dataset.search.includes(q)?'':'none';
+  });
+  document.querySelectorAll('.ref-table tbody tr').forEach(tr=>{
+    const text=tr.textContent.toLowerCase();
+    tr.style.display=!q||text.includes(q)?'':'none';
+  });
+}
+
+render();
+</script>
+</body>
+</html>
