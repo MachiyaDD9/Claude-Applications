@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bjj-english-v8';
+const CACHE_NAME = 'bjj-english-v9';
 const ASSETS = [
   './',
   './index.html',
@@ -23,8 +23,21 @@ self.addEventListener('activate', e => {
   self.clients.claim();
 });
 
+// ネットワーク優先: 常に最新を取得し、オフライン時のみキャッシュを使う
 self.addEventListener('fetch', e => {
+  const req = e.request;
+  if (req.method !== 'GET') return;
   e.respondWith(
-    caches.match(e.request).then(cached => cached || fetch(e.request))
+    fetch(req)
+      .then(res => {
+        if (res && res.ok) {
+          const copy = res.clone();
+          caches.open(CACHE_NAME).then(c => c.put(req, copy));
+        }
+        return res;
+      })
+      .catch(() =>
+        caches.match(req).then(m => m || (req.mode === 'navigate' ? caches.match('./index.html') : undefined))
+      )
   );
 });

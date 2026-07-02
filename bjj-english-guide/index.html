@@ -188,6 +188,7 @@ body{font-family:'Segoe UI','Hiragino Sans',sans-serif;background:var(--bg);colo
   <div class="sidebar"><nav class="nav-list" id="navList"></nav></div>
   <div class="main" id="mainContent"></div>
 </div>
+<div style="text-align:center;padding:8px 0 20px;color:var(--text-dim);font-size:.68rem">BJJ English Guide v9</div>
 
 <script>
 // ========================================
@@ -1207,7 +1208,7 @@ function filterItems(query){
   document.querySelectorAll('.ref-table tbody tr').forEach(tr=>{const text=tr.textContent.toLowerCase();tr.style.display=!q||text.includes(q)?'':'none';});
 }
 
-if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{});}
+if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).catch(()=>{});}
 render();
 </script>
 </body>
