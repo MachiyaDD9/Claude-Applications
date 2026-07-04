@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bjj-english-v11';
+const CACHE_NAME = 'bjj-english-v12';
 const ASSETS = [
   './',
   './index.html',

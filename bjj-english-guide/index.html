@@ -111,10 +111,31 @@ body{font-family:'Segoe UI','Hiragino Sans',sans-serif;background:var(--bg);colo
 .story-en{font-size:.9rem;color:var(--text);line-height:1.55}
 .story-jp{font-size:.78rem;color:var(--text-dim);line-height:1.55;margin-top:2px}
 .story-hint{font-size:.75rem;color:var(--text-dim);margin-bottom:16px}
-.story-group-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin:28px 0 14px;padding-bottom:8px;border-bottom:2px solid var(--border)}
+.story-group{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:14px;overflow:hidden}
+.story-group-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:16px 18px;cursor:pointer;transition:.2s}
+.story-group-head:hover{background:var(--card-hover)}
 .sg-title{font-weight:700;font-size:1.1rem;color:var(--text)}
 .sg-en{color:var(--text-dim);font-size:.78rem;margin-left:8px}
+.sg-meta{color:var(--text-dim);font-size:.72rem;margin-left:8px}
+.sg-actions{display:flex;align-items:center;gap:10px}
+.sg-arrow{color:var(--text-dim);font-size:.8rem;transition:transform .25s}
+.story-group.open .sg-arrow{transform:rotate(180deg)}
 .sg-btn{padding:8px 14px;font-size:.8rem}
+.sg-summary{padding:0 18px 12px;display:flex;flex-direction:column;gap:6px}
+.sg-summary-item{font-size:.83rem;color:var(--text-muted);line-height:1.6}
+.sg-summary-item b{color:var(--accent-light);font-weight:600}
+.sg-tap{padding:0 18px 14px;font-size:.72rem;color:var(--text-dim)}
+.story-group.open .sg-summary,.story-group.open .sg-tap{display:none}
+.sg-body{display:none;padding:14px 14px 2px;border-top:1px solid var(--border)}
+.story-group.open .sg-body{display:block}
+.sg-body .story-card{background:var(--surface)}
+.gl{border-bottom:1px dashed rgba(255,214,10,.55);cursor:pointer}
+.gl:hover{color:var(--yellow)}
+.gloss-pop{position:absolute;z-index:1000;background:#12141d;border:1px solid rgba(255,214,10,.5);border-radius:10px;padding:10px 12px;max-width:250px;font-size:.8rem;box-shadow:var(--shadow)}
+.gp-head{display:flex;align-items:center;gap:8px}
+.gloss-pop b{color:var(--yellow);font-size:.9rem}
+.gp-jp{color:var(--text);margin-top:4px;font-weight:600}
+.gp-note{color:var(--text-muted);margin-top:4px;font-size:.72rem;line-height:1.6}
 .search-bar{margin-bottom:20px}
 .search-bar input{width:100%;padding:12px 16px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:.9rem;outline:none;transition:.2s}
 .search-bar input:focus{border-color:var(--accent)}
@@ -193,7 +214,7 @@ body{font-family:'Segoe UI','Hiragino Sans',sans-serif;background:var(--bg);colo
   <div class="sidebar"><nav class="nav-list" id="navList"></nav></div>
   <div class="main" id="mainContent"></div>
 </div>
-<div style="text-align:center;padding:8px 0 20px;color:var(--text-dim);font-size:.68rem">BJJ English Guide v11</div>
+<div style="text-align:center;padding:8px 0 20px;color:var(--text-dim);font-size:.68rem">BJJ English Guide v12</div>
 
 <script>
 // ========================================
@@ -888,6 +909,64 @@ const DATA = [
 ];
 
 // ========================================
+//  ADVANCED GLOSSARY (英検準1級+の単語注釈 / 単語帳)
+//  w=見出し語 re=本文マッチ用パターン jp=意味 note=補足・用例
+// ========================================
+const GLOSS=[
+{w:'waiver',re:'waivers?',jp:'免責同意書',note:'入会や出稽古の際に署名を求められる書類。"Please sign the waiver."'},
+{w:'hygiene',re:'hygiene',jp:'衛生',note:'"Hygiene is part of jiu-jitsu."（衛生も柔術のうち）'},
+{w:'infection',re:'infections?',jp:'感染、感染症',note:'マット競技では皮膚感染症の予防が最重要事項。'},
+{w:'ringworm',re:'ringworm',jp:'白癬（はくせん）、タムシ',note:'皮膚の真菌感染症。あれば練習禁止が世界共通ルール。'},
+{w:'staph',re:'staph',jp:'ブドウ球菌（感染症）',note:'staphylococcusの略。ジムの掲示板でよく見る単語。'},
+{w:'ligament',re:'ligaments?',jp:'靭帯',note:'関節を繋ぐ組織。"joints and ligaments"（関節と靭帯）'},
+{w:'pelvis',re:'pelvis',jp:'骨盤',note:'マウントでは"squeeze the pelvis"（骨盤を挟む）のように使う。'},
+{w:'spine',re:'spinal|spine',jp:'脊椎、背骨',note:'spinal lock（脊椎への極め）はチョーク以外反則。'},
+{w:'ribs',re:'ribs?',jp:'肋骨（ろっこつ）',note:'"elbows glued to your ribs"（肘を肋骨に密着させる）'},
+{w:'jawline',re:'jawline|jaw',jp:'顎、顎のライン',note:'肩のプレッシャーは"on the jawline"にかける。'},
+{w:'armpit',re:'armpits?',jp:'脇の下',note:'アンダーフックは"dig into the armpit"（脇の下に差し込む）。'},
+{w:'forearm',re:'forearms?',jp:'前腕',note:'チョークは前腕の骨（橈骨）で絞める。'},
+{w:'biceps',re:'biceps?',jp:'上腕二頭筋',note:'RNCは"hand to the bicep"、スパイダーガードは"feet on the biceps"。'},
+{w:'thigh',re:'thighs?',jp:'太もも',note:'ニースライスは"shin across the thigh"（すねで太ももを横切る）。'},
+{w:'hamstring',re:'hamstrings?',jp:'ハムストリング（腿裏の筋群）',note:'ストレッチの定番箇所。'},
+{w:'calf',re:'calves|calf',jp:'ふくらはぎ',note:'カーフスライサーは下の帯では反則。'},
+{w:'shin',re:'shins?',jp:'すね',note:'シザースイープは"shin across the belt line"。'},
+{w:'posture',re:'postures?|posture',jp:'姿勢',note:'"posture up"（姿勢を立てる）はガード内での最重要防御。'},
+{w:'lever / leverage',re:'leverage|levers?',jp:'テコ / テコの原理',note:'"Levers are force multipliers."（テコは力の増幅装置）'},
+{w:'wedge',re:'wedges?',jp:'楔（くさび）',note:'手や膝を楔として差し込み、相手の動きを止める。'},
+{w:'force multiplier',re:'force multipliers?',jp:'力の増幅装置',note:'小さな力を大きな効果に変えるもの。テコの説明で頻出。'},
+{w:'skeletal',re:'skeletal|skeleton',jp:'骨格（の）',note:'"Use your skeletal structure, not your muscles."'},
+{w:'dominant',re:'dominant',jp:'優勢な、支配的な',note:'"dominant position"（優位なポジション）。'},
+{w:'transition',re:'transitions?',jp:'移行、つなぎ',note:'ポジション間の移動。フロースパーで磨く技術。'},
+{w:'retention',re:'retention',jp:'保持',note:'guard retention＝ガードを維持・回復する技術。'},
+{w:'stalling',re:'stalling|stalls|stall',jp:'膠着、消極的な時間稼ぎ',note:'試合ではペナルティの対象。レフェリーに"Lute!"と促される。'},
+{w:'bracket',re:'brackets?',jp:'トーナメント表',note:'"Check the bracket."（対戦表を確認して）'},
+{w:'single elimination',re:'single elimination',jp:'勝ち抜き戦',note:'一度負けたら敗退の方式。'},
+{w:'walkover',re:'walkovers?',jp:'不戦勝',note:'相手が現れない場合の勝ち。3回コールされて不在なら不戦敗。'},
+{w:'venue',re:'venues?',jp:'会場',note:'試合会場。"The venue opens at eight."'},
+{w:'division',re:'divisions?',jp:'階級、部門',note:'帯・体重・年齢で分けられる出場区分。'},
+{w:'podium',re:'podiums?',jp:'表彰台',note:'"on the podium"（表彰台で）。'},
+{w:'opponent',re:'opponents?',jp:'対戦相手',note:'partner（練習相手）との使い分けに注意。'},
+{w:'crank',re:'cranking|cranks?',jp:'（首や関節を）無理に捻る',note:'"Squeeze, don\'t crank."（絞めろ、捻るな）'},
+{w:'reaping',re:'reaping|reap',jp:'刈り（ニーリーピング）',note:'膝を内側に捻る形。下の帯では反則。'},
+{w:'explosive',re:'explosive',jp:'爆発的な',note:'"explosive movements"（爆発的な動き）。'},
+{w:'cooperative',re:'cooperative',jp:'協力的な',note:'ドリルの受け手は"realistic but cooperative"に。'},
+{w:'mechanics',re:'mechanics',jp:'（技の）仕組み、力学',note:'"check the mechanics"（技の構造を確認する）。'},
+{w:'trim',re:'trimmed|trim',jp:'切り揃える',note:'"nails trimmed short"（爪を短く切る）。'},
+{w:'souvenir',re:'souvenirs?',jp:'記念品、土産',note:'ジムパッチやラッシュガードが定番のお土産。'},
+{w:'patch',re:'patches|patch',jp:'ワッペン、パッチ',note:'道着に縫い付けるジムのロゴ。'},
+{w:'gassed',re:'gassed',jp:'スタミナ切れの（スラング）',note:'"I\'m gassed."（もうガス欠です）'},
+{w:'tweaked',re:'tweaked',jp:'軽く痛めた（スラング）',note:'"My knee is tweaked."（膝を軽く痛めている）'},
+{w:'banged up',re:'banged up',jp:'痛めている、ガタが来ている（スラング）',note:'"My shoulder is banged up."'},
+{w:'stray',re:'stray',jp:'逸れた、流れの',note:'"a stray knee"（狙っていない流れ膝）。'},
+{w:'scramble',re:'scrambles?',jp:'スクランブル',note:'ポジションが定まらない激しい攻防の入れ替わり。'},
+{w:'desperate',re:'desperate',jp:'追い詰められた、必死の',note:''},
+{w:'engage',re:'engaging|engages?',jp:'組み合う、仕掛ける',note:'試合で攻めないこと＝"refusing to engage"。'},
+{w:'pay off',re:'paid off|pays off|pay off',jp:'実を結ぶ',note:'"All those drills paid off."（ドリルの積み重ねが実を結んだ）'},
+{w:'no-no',re:'no-nos?',jp:'ご法度、してはいけないこと',note:'"A smelly gi is a big no-no."'}
+];
+DATA.push({id:'gloss',title:'上級英単語',subtitle:'Advanced Vocabulary（英検準1級+）',desc:'アプリ内の英文に登場する英検準1級レベル以上の単語集。朗読ストーリー内では黄色い下線付きで表示され、タップすると意味を確認できます。ここでは単語帳として体系的に復習できます。',type:'term',items:GLOSS.map(g=>({term:g.w,meaning:g.jp,detail:g.note}))});
+
+// ========================================
 //  LISTENING STORIES (朗読ストーリー)
 // ========================================
 const STORY_GROUPS=[
@@ -1200,16 +1279,52 @@ function renderRefMode(cat){
   return html+`</tbody></table></div>`;
 }
 
+function glossify(t){
+  let out=t;
+  GLOSS.forEach((g,gi)=>{
+    out=out.replace(new RegExp('\\b('+g.re+')\\b','gi'),(m)=>`<span class="gl" onclick="showGloss(event,${gi})">${m}</span>`);
+  });
+  return out;
+}
+function showGloss(ev,gi){
+  ev.stopPropagation();
+  const g=GLOSS[gi];
+  let p=document.getElementById('glossPop');
+  if(!p){
+    p=document.createElement('div');p.id='glossPop';p.className='gloss-pop';p.style.display='none';
+    document.body.appendChild(p);
+    document.addEventListener('click',()=>{p.style.display='none';});
+    p.addEventListener('click',e=>e.stopPropagation());
+  }
+  p.innerHTML=`<div class="gp-head"><b>${g.w}</b><button class="speak-btn" style="width:26px;height:26px" onclick="speak(event,\`${g.w.replace(/ \/ .*$/,'')}\`)">${SPEAK_SVG}</button></div><div class="gp-jp">${g.jp}</div>${g.note?`<div class="gp-note">${g.note}</div>`:''}`;
+  p.style.display='block';
+  const r=ev.target.getBoundingClientRect();
+  const px=Math.min(Math.max(8,r.left+window.scrollX),window.scrollX+Math.max(8,window.innerWidth-262));
+  p.style.left=px+'px';
+  p.style.top=(r.bottom+window.scrollY+8)+'px';
+}
+let expandedGroups={};
+function toggleGroup(gid){
+  expandedGroups[gid]=!expandedGroups[gid];
+  const el=document.getElementById('sgroup-'+gid);
+  if(el)el.classList.toggle('open',!!expandedGroups[gid]);
+}
+function ensureGroupOpen(gid){
+  if(!gid||expandedGroups[gid])return;
+  expandedGroups[gid]=true;
+  const el=document.getElementById('sgroup-'+gid);
+  if(el)el.classList.add('open');
+}
 function storyCardHTML(st,si){
   return `<div class="story-card">
     <div class="story-head">
       <div style="flex:1;min-width:200px"><div class="story-title">${st.title}</div><div class="story-desc">${st.desc}</div></div>
-      <button class="story-play" id="story-btn-${si}" onclick="playStory(${si})">&#9654; 朗読スタート</button>
+      <button class="story-play" id="story-btn-${si}" onclick="event.stopPropagation();playStory(${si})">&#9654; 朗読スタート</button>
     </div>
     <div class="story-lines">${st.lines.map((ln,li)=>`
       <div class="story-line" id="sline-${si}-${li}" onclick="speakStoryLine(${si},${li})">
         <div class="story-sp ${ln.sp}">${st.speakers[ln.sp]||ln.sp}</div>
-        <div><div class="story-en">${ln.en}</div><div class="story-jp">${ln.jp}</div></div>
+        <div><div class="story-en">${glossify(ln.en)}</div><div class="story-jp">${ln.jp}</div></div>
       </div>`).join('')}
     </div>
   </div>`;
@@ -1219,10 +1334,20 @@ function renderStoryMode(cat){
     <button class="story-play" id="story-all-btn" onclick="playAllStories(false)">&#9654; 全話連続再生</button>
     <button class="story-play secondary" id="story-shuffle-btn" onclick="playAllStories(true)">&#128256; シャッフル再生</button>
   </div>
-  <div class="story-hint">&#9654; で個別再生、カテゴリ見出しの&#9654;でカテゴリ内を連続再生、上のボタンで全12話を通し再生。シャッフルは<b>カテゴリ単位</b>（各カテゴリ内の話の順番と会話の流れは崩れません）。各行クリックでその行だけ聞けます。</div>`;
+  <div class="story-hint">カテゴリをクリックすると会話を全表示します。&#9654;で個別再生、カテゴリ見出しの&#9654;でカテゴリ内を連続再生、上のボタンで全12話を通し再生。シャッフルは<b>カテゴリ単位</b>（話の順番と会話の流れは崩れません）。<span class="gl" style="pointer-events:none">黄色い下線</span>の単語はタップで意味を確認できます。</div>`;
   STORY_GROUPS.forEach(g=>{
-    html+=`<div class="story-group-head"><div><span class="sg-title">${g.title}</span><span class="sg-en">${g.en}</span></div><button class="story-play secondary sg-btn" id="story-group-btn-${g.id}" onclick="playGroupStories('${g.id}')">&#9654; 連続再生</button></div>`;
-    cat.items.forEach((st,si)=>{if(st.group===g.id)html+=storyCardHTML(st,si);});
+    const items=[];cat.items.forEach((st,si)=>{if(st.group===g.id)items.push([st,si]);});
+    const lineTotal=items.reduce((s,p)=>s+p[0].lines.length,0);
+    const open=!!expandedGroups[g.id];
+    html+=`<div class="story-group ${open?'open':''}" id="sgroup-${g.id}">
+      <div class="story-group-head" onclick="toggleGroup('${g.id}')">
+        <div><span class="sg-title">${g.title}</span><span class="sg-en">${g.en}</span><span class="sg-meta">${items.length}話・${lineTotal}行</span></div>
+        <div class="sg-actions"><button class="story-play secondary sg-btn" id="story-group-btn-${g.id}" onclick="event.stopPropagation();playGroupStories('${g.id}')">&#9654; 連続再生</button><span class="sg-arrow">&#9660;</span></div>
+      </div>
+      <div class="sg-summary">${items.map(p=>`<div class="sg-summary-item"><b>${p[0].title}</b></div>`).join('')}</div>
+      <div class="sg-tap">&#9660; クリックで会話を全表示</div>
+      <div class="sg-body">${items.map(p=>storyCardHTML(p[0],p[1])).join('')}</div>
+    </div>`;
   });
   return html;
 }
@@ -1303,6 +1428,7 @@ function startQueued(){
   if(!storyPB.queue)return;
   const si=storyPB.queue[storyPB.qpos];
   storyPB.active=si;storyPB.idx=0;storyPB.token++;
+  ensureGroupOpen(STORIES[si].group);
   const b=document.getElementById('story-btn-'+si);
   if(b){b.innerHTML='&#9632; 停止';b.classList.add('playing');}
   // 全話再生・シャッフル再生ではカテゴリの切り替わりで英語のパート紹介を挟む
@@ -1329,6 +1455,7 @@ function playStory(si){
   if(storyPB.active===si){stopStory();return;}
   stopStory();
   storyPB.active=si;storyPB.idx=0;storyPB.token++;
+  ensureGroupOpen(STORIES[si].group);
   const b=document.getElementById('story-btn-'+si);
   if(b){b.innerHTML='&#9632; 停止';b.classList.add('playing');}
   storyNext();
