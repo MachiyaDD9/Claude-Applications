@@ -111,6 +111,10 @@ body{font-family:'Segoe UI','Hiragino Sans',sans-serif;background:var(--bg);colo
 .story-en{font-size:.9rem;color:var(--text);line-height:1.55}
 .story-jp{font-size:.78rem;color:var(--text-dim);line-height:1.55;margin-top:2px}
 .story-hint{font-size:.75rem;color:var(--text-dim);margin-bottom:16px}
+.story-group-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin:28px 0 14px;padding-bottom:8px;border-bottom:2px solid var(--border)}
+.sg-title{font-weight:700;font-size:1.1rem;color:var(--text)}
+.sg-en{color:var(--text-dim);font-size:.78rem;margin-left:8px}
+.sg-btn{padding:8px 14px;font-size:.8rem}
 .search-bar{margin-bottom:20px}
 .search-bar input{width:100%;padding:12px 16px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:.9rem;outline:none;transition:.2s}
 .search-bar input:focus{border-color:var(--accent)}
@@ -161,6 +165,7 @@ body{font-family:'Segoe UI','Hiragino Sans',sans-serif;background:var(--bg);colo
   .story-card{padding:16px}
   .story-head{flex-direction:column;align-items:stretch}
   .story-play{width:100%;padding:12px}
+  .sg-btn{width:auto;padding:8px 14px;font-size:.78rem}
   .story-all-bar{gap:8px}
   .story-all-bar .story-play{flex:1;width:auto;min-width:0;padding:12px 8px;font-size:.85rem}
   .story-line{padding:8px 6px;gap:8px}
@@ -188,7 +193,7 @@ body{font-family:'Segoe UI','Hiragino Sans',sans-serif;background:var(--bg);colo
   <div class="sidebar"><nav class="nav-list" id="navList"></nav></div>
   <div class="main" id="mainContent"></div>
 </div>
-<div style="text-align:center;padding:8px 0 20px;color:var(--text-dim);font-size:.68rem">BJJ English Guide v9</div>
+<div style="text-align:center;padding:8px 0 20px;color:var(--text-dim);font-size:.68rem">BJJ English Guide v10</div>
 
 <script>
 // ========================================
@@ -885,8 +890,14 @@ const DATA = [
 // ========================================
 //  LISTENING STORIES (朗読ストーリー)
 // ========================================
+const STORY_GROUPS=[
+{id:'dojo',title:'道場編',en:'At the Academy'},
+{id:'rolling',title:'スパーリング編',en:'Rolling'},
+{id:'comp',title:'試合編',en:'Competition'},
+{id:'community',title:'交流編',en:'Community'}
+];
 const STORIES=[
-{title:'Story 1: Drop-in Day — 出稽古初日',desc:'事前の問い合わせから道場到着、エチケット、ウォームアップ、テクニッククラスまで。出稽古・挨拶・クラス進行・基本語彙の表現を網羅した長編。',speakers:{A:'Ken',B:'Coach',N:'ナレ'},lines:[
+{group:'dojo',title:'Drop-in Day — 出稽古初日',desc:'事前の問い合わせから道場到着、エチケット、ウォームアップ、テクニッククラスまで。出稽古・挨拶・クラス進行の表現を網羅。',speakers:{A:'Ken',B:'Coach',N:'ナレ'},lines:[
 {sp:'N',en:'Ken, a blue belt from Tokyo, is planning a trip to San Diego. Before flying, he sends a message to a local BJJ academy.',jp:'東京の青帯ケンはサンディエゴ旅行を計画中。出発前に、現地の柔術アカデミーへメッセージを送る。'},
 {sp:'A',en:'Hi! I\'ll be in town next week. Do you accept drop-ins?',jp:'こんにちは！来週そちらの街に行きます。ドロップイン（出稽古）は受け付けていますか？'},
 {sp:'B',en:'Absolutely! The mat fee for a visitor is twenty dollars, and yes, you can pay by card.',jp:'もちろん！ビジターのマット料金は20ドルで、カード払いもOKですよ。'},
@@ -917,12 +928,44 @@ const STORIES=[
 {sp:'N',en:'After class, Ken buys a gym patch and a rash guard as souvenirs.',jp:'クラスの後、ケンはジムパッチとラッシュガードをお土産に購入した。'},
 {sp:'A',en:'Thank you for having me! Can I tag the gym on Instagram? I\'ll come back next time I\'m in town.',jp:'受け入れてくれてありがとうございました！インスタでジムをタグ付けしてもいいですか？また街に来たら必ず寄ります！'},
 {sp:'B',en:'Any time, Ken. Oss!',jp:'いつでもおいで、ケン。オス！'}]},
-{title:'Story 2: Open Mat Rounds — オープンマットのロール',desc:'スパーリングの誘い方から強度設定、ガード・ポジションの攻防、バイオメカニクス、タップの哲学まで。スパーリング・怪我・魔法のフレーズを網羅した長編。',speakers:{A:'Ken',B:'Maria',C:'Tom',N:'ナレ'},lines:[
+{group:'dojo',title:'Question Time — 質問タイム',desc:'ドリル後の質問コーナー。エスケープのコツ、腕十字・三角のディテール、上達の原則。「魔法のフレーズ」を実戦投入する回。',speakers:{A:'Ken',B:'Coach',N:'ナレ'},lines:[
+{sp:'N',en:'After drilling, the coach opens the floor for questions.',jp:'ドリルの後、コーチが質問タイムを設けた。'},
+{sp:'A',en:'What\'s the easiest way to escape mount?',jp:'マウントから抜ける一番簡単な方法は何ですか？'},
+{sp:'B',en:'Bridge and roll — the upa. Trap their arm and leg on the same side, then bridge over your shoulder.',jp:'ブリッジ＆ロール、つまりウパだ。同じ側の腕と脚をトラップして、肩の方向へブリッジする。'},
+{sp:'A',en:'My armbar keeps slipping. Any details I\'m missing?',jp:'腕十字がよく抜けられてしまいます。見落としているディテールはありますか？'},
+{sp:'B',en:'Pinch your knees, control the wrist, and keep their thumb pointing up. Lift your hips slowly — squeeze, don\'t yank.',jp:'膝を締めて、手首を制して、相手の親指を上に向ける。腰はゆっくり上げる——引きちぎるんじゃなくて、絞り上げる。'},
+{sp:'A',en:'What\'s your highest percentage guard for beginners?',jp:'初心者にとって一番成功率の高いガードは何ですか？'},
+{sp:'B',en:'Closed guard, no question. Break their posture with your legs, then attack the collar and the arms.',jp:'間違いなくクローズドガード。脚で姿勢を崩して、それから衿と腕を攻める。'},
+{sp:'A',en:'And your bread and butter submission from there?',jp:'そこからの十八番（ブレッド・アンド・バター）のサブミッションは？'},
+{sp:'B',en:'The triangle. One arm in, one arm out, then cut the angle and squeeze your knees.',jp:'三角絞めだ。片腕を入れて片腕を出す、それから角度を作って膝を締める。'},
+{sp:'N',en:'Ken writes everything in his notebook: frames, levers, wedges, base, posture, pressure.',jp:'ケンはノートに書き込む。フレーム、テコ、楔、ベース、姿勢、プレッシャー。'},
+{sp:'A',en:'One more — how do I get better at escapes?',jp:'もうひとつ——エスケープが上手くなるにはどうすれば？'},
+{sp:'B',en:'Start in bad positions on purpose. Let your partner take side control or mount, then work out. Use your skeleton, not your muscles.',jp:'わざと不利なポジションから始めることだ。サイドやマウントを取らせてから脱出する。筋肉ではなく骨格を使って。'},
+{sp:'B',en:'And remember to breathe. If you hold your breath, you\'ll be gassed in one minute.',jp:'それと呼吸を忘れずに。息を止めたら1分でガス欠になるよ。'},
+{sp:'A',en:'Oss! Thank you, Professor.',jp:'オス！ありがとうございます、先生。'},
+{sp:'N',en:'Position before submission. Timing beats strength. Tap early, tap often. The principles connect everything.',jp:'極めの前にポジション。タイミングは力に勝る。早めに、頻繁にタップ。原則がすべてを繋いでいる。'}]},
+{group:'dojo',title:'Etiquette Rescue — 新入りとエチケット',desc:'白帯トムのエチケット違反をケンとコーチがやさしく修正。道着の洗濯、爪とアクセサリー、体格差への配慮、郷に従え。',speakers:{A:'Ken',B:'Coach',C:'Tom',N:'ナレ'},lines:[
+{sp:'N',en:'A new white belt, Tom, shows up for his second class. Ken helps him get ready.',jp:'白帯の新人トムが2回目のクラスにやってきた。ケンが準備を手伝う。'},
+{sp:'C',en:'My gi smells a little... I forgot to wash it after last class.',jp:'道着がちょっと臭うんだ……前回のクラスの後、洗い忘れちゃって。'},
+{sp:'A',en:'That\'s a big no-no. Wash your gi and belt after every session — no exceptions.',jp:'それは一番のNGですよ。道着と帯は毎回洗う——例外なしです。'},
+{sp:'C',en:'The belt too?!',jp:'帯もなの！？'},
+{sp:'A',en:'The belt too. It touches everyone you roll with.',jp:'帯もです。ロールする全員に触れるものですから。'},
+{sp:'N',en:'Ken checks Tom\'s hands. The nails are long.',jp:'ケンはトムの手をチェックする。爪が長い。'},
+{sp:'A',en:'Trim your nails short, and take off that necklace before class.',jp:'爪は短く切って、そのネックレスもクラスの前に外しましょう。'},
+{sp:'N',en:'During sparring, Tom crushes a much smaller partner with all his weight. The coach calls him over.',jp:'スパーリングで、トムはずっと小柄な相手を全体重で潰してしまう。コーチが呼び寄せた。'},
+{sp:'B',en:'Tom, with women and much lighter partners, don\'t just use weight and strength. Match their pace and let them work.',jp:'トム、女性やずっと軽い相手には体重と力だけで潰さない。ペースを合わせて、技を出させてあげるんだ。'},
+{sp:'C',en:'Got it. Sorry!',jp:'わかりました。すみません！'},
+{sp:'B',en:'And one more thing — I saw you coaching your partner mid-roll. Leave the teaching to the instructors.',jp:'それともうひとつ——ロール中に相手にコーチングしていたね。指導はインストラクターに任せなさい。'},
+{sp:'N',en:'After class, Tom watches the others. Some bow to the mat, some don\'t. He asks Ken.',jp:'クラスの後、トムは周りを観察する。マットにお辞儀をする人も、しない人もいる。ケンに尋ねた。'},
+{sp:'C',en:'Should I bow when stepping on the mat?',jp:'マットに上がるとき、お辞儀すべきなのかな？'},
+{sp:'A',en:'Just follow what the locals do. Every gym has its own culture.',jp:'周りの人に合わせれば大丈夫。ジムごとに文化が違いますから。'},
+{sp:'B',en:'You\'re asking the right questions, Tom. See you next class — Oss!',jp:'いい質問ができているよ、トム。また次のクラスで——オス！'}]},
+{group:'rolling',title:'Open Mat Rounds — オープンマットのロール',desc:'スパーリングの誘い方から強度設定、ガード・ポジションの攻防、バイオメカニクス、タップの哲学まで全部盛りの長編。',speakers:{A:'Ken',B:'Maria',C:'Tom',N:'ナレ'},lines:[
 {sp:'N',en:'Saturday open mat. Ken spots Maria, a brown belt whose smooth guard passing he was watching earlier.',jp:'土曜のオープンマット。ケンは、さっき華麗なパスガードを見ていた茶帯のマリアを見つける。'},
 {sp:'A',en:'Excuse me, Maria — would you like to roll?',jp:'すみません、マリアさん——ロールしませんか？'},
 {sp:'B',en:'Sure, I\'d love to!',jp:'もちろん、喜んで！'},
 {sp:'A',en:'One thing — my right shoulder is a little banged up, so please go easy on that side.',jp:'ひとつだけ——右肩を少し痛めているので、そちら側はお手柔らかにお願いします。'},
-{sp:'B',en:'Got it. Let\'s go light, around seventy percent. If I catch a joint lock, I\'ll apply it slowly — tap any time.',jp:'了解。軽めに、70％くらいで。関節を取ったらゆっくり極めるから、いつでもタップしてね。'},
+{sp:'B',en:'Got it. Let\'s go light, around seventy percent. If I catch a joint lock, I\'ll apply it slowly — tap any time.',jp:'了解。軽めに、70％くらいで。関節を取ったらゆっくり極めるから、いつでもタップして。'},
 {sp:'N',en:'Maria is much lighter than Ken. He reminds himself: with women and lighter partners, don\'t rely on weight and strength. Let the technique talk.',jp:'マリアはケンよりずっと軽い。女性や軽い相手に体重と力は使わない。技に語らせるのだ。'},
 {sp:'N',en:'Slap, bump — the roll begins. Ken pulls closed guard, gripping the collar and sleeve.',jp:'スラップ、バンプ——ロール開始。ケンはクローズドガードを引き込み、衿と袖を掴む。'},
 {sp:'N',en:'Maria postures up — head up, spine straight — elbows glued to her ribs like a T-Rex.',jp:'マリアは頭を上げ、背筋を伸ばして姿勢を立てる。肘はティラノサウルスのように肋骨へ密着。'},
@@ -956,7 +999,47 @@ const STORIES=[
 {sp:'B',en:'Perfect. One tip first: in your triangles — one arm in, one arm out, shoot your hips up. You\'re using too much strength. Relax your grips, cut the angle, and squeeze your knees.',jp:'いいね。その前にひとつアドバイス。三角絞めは「片腕を入れ、片腕を出し、腰を跳ね上げる」。今は力みすぎ。グリップを緩めて、角度を作って、膝を締めるの。'},
 {sp:'A',en:'Oss! Thank you for the rolls. Your pressure is unbelievable, and that deep half sweep was perfectly timed.',jp:'オス！ありがとうございました。プレッシャーは信じられない重さでしたし、ディープハーフスイープのタイミングも完璧でした。'},
 {sp:'N',en:'On the notice board: "No training with ringworm, staph, or open cuts. Wash your gi and belt after every session."',jp:'掲示板にはこう書いてある。「白癬・ブドウ球菌感染・開いた傷がある場合は練習禁止。道着と帯は毎回洗濯すること」'}]},
-{title:'Story 3: Competition Day — 試合の日',desc:'審判コマンド、ポイントシステム、帯別ルール、反則、そして一本勝ちまで。ルール・審判・テクニックの表現を網羅した長編。',speakers:{A:'Ken',B:'Referee',N:'ナレ'},lines:[
+{group:'rolling',title:'Flow Roll — 体で指すチェス',desc:'50%のフロースパーでトランジションを磨く回。ガードの連携、ポジションの循環、呼吸。ケンが茶帯から初スイープを取る。',speakers:{A:'Ken',B:'Maria',N:'ナレ'},lines:[
+{sp:'N',en:'Cool-down time. Ken and Maria start a flow roll — fifty percent, no muscling, just movement.',jp:'クールダウンの時間。ケンとマリアはフロースパーを始める。50％、力まず、動きだけ。'},
+{sp:'B',en:'Let\'s keep it playful. If you catch a submission, just hold the position and let it go.',jp:'遊び感覚でいきましょう。サブミッションを取っても、ポジションだけ確認して放すの。'},
+{sp:'N',en:'Ken pulls closed guard, transitions to spider guard, then De La Riva. Maria calmly passes with a toreando.',jp:'ケンはクローズドガードからスパイダー、そしてデラヒーバへ。マリアは落ち着いてトレアンドでパスする。'},
+{sp:'N',en:'Side control, knee on belly, mount — she cycles through positions like water.',jp:'サイドコントロール、ニーオンベリー、マウント——彼女は水のようにポジションを巡る。'},
+{sp:'N',en:'Ken bridges, shrimps, recovers half guard, then dives into deep half. He rolls Maria over — his first sweep on a brown belt!',jp:'ケンはブリッジ、エビ、ハーフガード回復、そしてディープハーフへ潜り込む。マリアを転がした——茶帯から初のスイープ！'},
+{sp:'B',en:'Nice! Your hip movement is getting smoother.',jp:'ナイス！腰の動きが滑らかになってきたね。'},
+{sp:'A',en:'I finally feel the difference between pushing with my arms and moving my hips.',jp:'腕で押すのと腰を動かすのの違いが、やっとわかってきました。'},
+{sp:'N',en:'They keep flowing: guard pass, guard recovery, back take, escape. No taps needed, no ego involved.',jp:'二人は流れ続ける。パス、ガード回復、バックテイク、エスケープ。タップも、エゴも不要だ。'},
+{sp:'B',en:'This is how you build transitions. Slow is smooth, and smooth becomes fast.',jp:'こうやってトランジションを磨くの。ゆっくりは滑らか、滑らかはやがて速くなる。'},
+{sp:'N',en:'The timer buzzes. Ken is sweaty but not gassed — because he never stopped breathing.',jp:'タイマーが鳴る。ケンは汗だくだがガス欠ではない。呼吸を一度も止めなかったからだ。'},
+{sp:'A',en:'Flow rolling might be my favorite part of jiu-jitsu now.',jp:'フロースパー、今では柔術で一番好きな時間かもしれません。'},
+{sp:'B',en:'Mine too. It\'s chess with your body.',jp:'私もよ。体で指すチェスだから。'}]},
+{group:'rolling',title:'The Tough Day — 心が折れそうな日',desc:'何をやってもうまくいかない日。ガス欠、連続タップ、焦り。コーチの言葉「成長は負けのように感じる」。',speakers:{A:'Ken',B:'Coach',C:'Alex',N:'ナレ'},lines:[
+{sp:'N',en:'Some days nothing works. Today is one of those days for Ken.',jp:'何をやってもうまくいかない日がある。今日のケンがそれだ。'},
+{sp:'N',en:'Round one: mounted in thirty seconds. Round two: armbar, triangle, kimura — tap, tap, tap.',jp:'1本目、開始30秒でマウントを取られる。2本目は腕十字、三角、キムラ——タップ、タップ、タップ。'},
+{sp:'C',en:'Are you okay? You look frustrated.',jp:'大丈夫？イライラしてるみたいだけど。'},
+{sp:'A',en:'Sorry, I\'m getting smashed today. My grips are dead and my knee is acting up again.',jp:'すみません、今日は潰されっぱなしで。握力は死んでるし、膝もまた調子が悪くて。'},
+{sp:'C',en:'Then let\'s go light. Seventy percent, and no attacks on that knee.',jp:'なら軽くやろう。70％で、その膝への攻めはなしで。'},
+{sp:'N',en:'Even at seventy percent, Ken gets caught again. He sits against the wall, gassed.',jp:'70％でもケンはまた極められる。壁にもたれて座り込む。ガス欠だ。'},
+{sp:'B',en:'Rough day?',jp:'きつい日か？'},
+{sp:'A',en:'I feel like I\'m getting worse, Professor.',jp:'先生、自分が下手になっている気がします。'},
+{sp:'B',en:'You\'re not getting worse. You\'re rolling with better people than six months ago. The mat is honest — growth feels like losing.',jp:'下手になってるんじゃない。半年前より強い相手とロールしているんだ。マットは正直だ——成長は負けのように感じるものだよ。'},
+{sp:'B',en:'You\'re also using too much strength when you panic. Breathe. Relax your grips. Trust your frames.',jp:'それと、パニックになると力みすぎている。呼吸して。グリップを緩めて。フレームを信じるんだ。'},
+{sp:'A',en:'Tap early, tap often... and come back tomorrow?',jp:'早めに頻繁にタップ……そして明日また来い、ですか？'},
+{sp:'B',en:'Exactly. There is no losing on the mat — only learning. The only bad training day is the one you skip.',jp:'その通り。マットに敗北はない、学びだけだ。悪い練習日というのは、サボった日だけだよ。'},
+{sp:'N',en:'Ken bows off the mat. Tomorrow, he drills again.',jp:'ケンはマットを降りる。明日もまた、ドリルだ。'}]},
+{group:'comp',title:'Weigh-in Day — 計量の朝',desc:'試合当日の朝。チェックイン、計量、道着チェック、ブラケット確認、ルールの最終復習。試合前の実務英語。',speakers:{A:'Ken',B:'Official',N:'ナレ'},lines:[
+{sp:'N',en:'Tournament morning. Ken arrives two hours early with his lightest competition gi.',jp:'試合当日の朝。ケンは一番軽い試合用道着を持って、2時間前に会場入りする。'},
+{sp:'A',en:'Good morning! Where do I check in? I\'m competing in the adult blue belt division.',jp:'おはようございます！チェックインはどこですか？アダルト青帯ディビジョンに出場します。'},
+{sp:'B',en:'Right here. Name and bracket? You\'ll weigh in with your gi on, right before your first match.',jp:'こちらです。お名前とブラケットは？計量は初戦の直前、道着を着たまま行います。'},
+{sp:'N',en:'Ken checks the bracket sheet: four competitors, single elimination.',jp:'ケンはブラケット表を確認する。出場4人、負けたら終わりのトーナメントだ。'},
+{sp:'B',en:'Step on the scale, please... You\'re right at the limit. Good.',jp:'スケールに乗ってください……ちょうどリミットぴったり。OKです。'},
+{sp:'N',en:'The official also checks his gi — sleeve length, collar thickness, no rips.',jp:'係員は道着もチェックする。袖の長さ、衿の厚さ、破れがないか。'},
+{sp:'B',en:'Trim those fingernails before you compete, please. There\'s a clipper at the table.',jp:'試合前にその爪を切ってくださいね。テーブルに爪切りがありますよ。'},
+{sp:'A',en:'Oss, will do. When does my division start?',jp:'オス、切ってきます。僕のディビジョンは何時開始ですか？'},
+{sp:'B',en:'Around eleven. Listen for your name — if you miss three calls, it\'s a walkover.',jp:'11時頃です。名前のコールを聞き逃さないで。3回呼ばれて来なければ不戦敗ですよ。'},
+{sp:'N',en:'Ken warms up: shrimps, bridges, takedown entries. He reviews the rules in his head — points, advantages, and what\'s illegal at blue belt.',jp:'ケンはウォームアップ。エビ、ブリッジ、タックルの入り。頭の中でルールを復習する。ポイント、アドバンテージ、そして青帯での反則技。'},
+{sp:'A',en:'No heel hooks, no knee reaping, no slams. The straight ankle lock is fine.',jp:'ヒールフックなし、ニーリーピングなし、スラムなし。ストレートアンクルロックはOK。'},
+{sp:'N',en:'His name echoes through the venue. Time to fight.',jp:'会場に彼の名前が響く。試合の時間だ。'}]},
+{group:'comp',title:'Competition Day — 初戦を勝つ',desc:'審判コマンド、ポイントの積み上げ、反則、そして一本勝ちまで。試合の流れを実況形式で追う長編。',speakers:{A:'Ken',B:'Referee',N:'ナレ'},lines:[
 {sp:'N',en:'Sunday. A local tournament. In the venue, all five adult belts: white, blue, purple, brown, and black.',jp:'日曜、地元のトーナメント。会場には大人の5つの帯が揃う——白、青、紫、茶、黒。'},
 {sp:'N',en:'At blue belt in Gi, heel hooks are illegal and knee reaping is a foul. Only the straight ankle lock is allowed — kneebars and toe holds must wait until brown belt.',jp:'青帯のGi試合ではヒールフックは反則、ニーリーピングも反則。合法なのはストレートアンクルロックのみ——ニーバーとトーホールドは茶帯までお預けだ。'},
 {sp:'N',en:'Ken warms up, checking every joint and ligament — neck, shoulders, wrists, hips, knees, ankles — and stretches his hamstrings and calves.',jp:'ケンはウォームアップ。首、肩、手首、股関節、膝、足首——関節と靭帯をすべてチェックし、ハムストリングとふくらはぎを伸ばす。'},
@@ -979,10 +1062,61 @@ const STORIES=[
 {sp:'N',en:'He squeezes with his back and shoulders — smooth, never cranking the neck. The opponent taps twice.',jp:'背中と肩で滑らかに絞める——首は決して捻らない。相手が2回タップした。'},
 {sp:'B',en:'Parou!',jp:'パロウ！（終了！）'},
 {sp:'N',en:'Submission victory! The tap ends everything, whatever the score. Position before submission — always.',jp:'一本勝ち！スコアがどうであれ、タップが全てを終わらせる。「極めの前にポジション」——常にこれだ。'},
-{sp:'A',en:'Oss! All those drills paid off.',jp:'オス！ドリルの積み重ねが実を結んだ。'},
-{sp:'N',en:'On the podium, Ken re-ties his belt and thinks of the road ahead: purple, brown, black. Tomorrow, he drills again.',jp:'表彰台でケンは帯を締め直し、この先の道を思う——紫、茶、そして黒へ。明日もまた、ドリルだ。'}]}
+{sp:'A',en:'Oss! One down. The final is next.',jp:'オス！まず1勝。次は決勝だ。'},
+{sp:'N',en:'Ken re-ties his belt and watches the other semifinal — his next opponent finishes an armbar in twenty seconds.',jp:'ケンは帯を締め直し、もう一つの準決勝を見つめる。次の対戦相手は、20秒で腕十字を極めた。'}]},
+{group:'comp',title:'Learning from a Loss — 敗戦から学ぶ',desc:'決勝で腕十字に敗れたケン。相手からのフィードバック、コーチの分析、そして次への一歩。負けを学びに変える英語。',speakers:{A:'Ken',B:'Opponent',C:'Coach',N:'ナレ'},lines:[
+{sp:'N',en:'The final. Ken loses by armbar in the second minute.',jp:'決勝戦。ケンは開始2分、腕十字に敗れた。'},
+{sp:'N',en:'He taps clearly, twice. The referee shouts "Parou!" and raises the opponent\'s hand.',jp:'ケンは明確に2回タップ。レフェリーが「パロウ！」と叫び、相手の手を上げる。'},
+{sp:'A',en:'That armbar was so fast. What did you see?',jp:'あの腕十字、速すぎました。何が見えていたんですか？'},
+{sp:'B',en:'Your posture broke when I pulled the collar, and you left your arm on my chest. From there, it\'s my bread and butter.',jp:'衿を引いたときに姿勢が崩れて、腕が僕の胸に残っていたんだ。そこからは僕の十八番だよ。'},
+{sp:'A',en:'I didn\'t even feel the setup.',jp:'セットアップに気づきもしませんでした。'},
+{sp:'B',en:'You defended well for a blue belt. Add more frames next time — you\'ll be dangerous.',jp:'青帯にしてはよく守っていたよ。次はもっとフレームを使うといい——手強くなるぞ。'},
+{sp:'N',en:'On the drive home, Ken\'s coach breaks down the match.',jp:'帰りの車で、コーチが試合を振り返る。'},
+{sp:'C',en:'You won the takedown battle — that double leg was textbook. Two points, clean.',jp:'テイクダウンの攻防は勝っていた。あのダブルレッグは教科書通り。クリーンな2点だった。'},
+{sp:'C',en:'But after the guard pull, you rushed. Position before submission works in defense too: recover your posture first, then fight the grips.',jp:'でもガードを引かれた後、焦ったな。「極めの前にポジション」は防御でも同じだ。まず姿勢を回復して、それからグリップと戦う。'},
+{sp:'A',en:'I held my breath the whole match, too. My forearms were gassed in a minute.',jp:'試合中ずっと息も止めていました。前腕が1分でガス欠でした。'},
+{sp:'C',en:'Everyone does that in their first final. Silver at your first tournament is nothing to be ashamed of.',jp:'初めての決勝ではみんなそうなる。初トーナメントで銀メダルなら、胸を張っていい。'},
+{sp:'N',en:'Ken looks at the medal. Next time, gold. Tomorrow, he drills the armbar defense.',jp:'ケンはメダルを見つめる。次は金だ。明日は腕十字のディフェンスをドリルしよう。'}]},
+{group:'community',title:'After Class Small Talk — 練習後の雑談',desc:'練習歴、道着ブランド、洗濯のコツ、オープンマットへの誘い、SNS交換。マットの外の英会話。',speakers:{A:'Ken',B:'Alex',C:'Maria',N:'ナレ'},lines:[
+{sp:'N',en:'Class is over. Everyone sits around the mat, catching their breath and chatting.',jp:'クラス終了。みんなマットの周りに座り、息を整えながら雑談する。'},
+{sp:'B',en:'How long have you been training, Ken?',jp:'ケンはどれくらい練習してるの？'},
+{sp:'A',en:'About three years. I started right after watching a tournament. How about you?',jp:'3年くらいです。トーナメントを観た直後に始めました。あなたは？'},
+{sp:'B',en:'Five years, on and off. Work keeps getting in the way.',jp:'途切れ途切れで5年かな。仕事が邪魔してばかりでね。'},
+{sp:'C',en:'Ken, your gi is cool. What brand is it?',jp:'ケン、その道着いいね。どこのブランド？'},
+{sp:'A',en:'A Japanese brand. It shrank a little after the first wash, though.',jp:'日本のブランドです。最初の洗濯でちょっと縮みましたけど。'},
+{sp:'B',en:'Always wash cold and hang dry. Never use the dryer — trust me, I ruined two gis.',jp:'洗いは常に冷水、干すのは吊るして。乾燥機は絶対ダメ——信じて、俺は道着を2着ダメにしたから。'},
+{sp:'C',en:'Are you coming to open mat on Sunday?',jp:'日曜のオープンマットには来る？'},
+{sp:'A',en:'I\'d love to! Is it okay for visitors?',jp:'ぜひ！ビジターでも大丈夫ですか？'},
+{sp:'C',en:'Of course. Bring your no-gi gear too — Sundays are mixed.',jp:'もちろん。ノーギの装備も持ってきて。日曜は両方やるから。'},
+{sp:'B',en:'And add me on Instagram. I post all the techniques we drill.',jp:'あとインスタで繋がろう。ドリルした技を全部投稿してるんだ。'},
+{sp:'A',en:'Nice! I\'ll tag the gym in my training posts. See you Sunday — Oss!',jp:'いいですね！練習の投稿でジムをタグ付けしますね。日曜に——オス！'}]},
+{group:'community',title:'Coming Back — 怪我からの復帰',desc:'膝の怪我から6週間、復帰初日。医師の許可、パートナーへの伝え方、賢い休養も練習のうち。',speakers:{A:'Ken',B:'Coach',C:'Alex',N:'ナレ'},lines:[
+{sp:'N',en:'Six weeks after tweaking his knee, Ken returns to the mat with a knee sleeve.',jp:'膝を痛めてから6週間。ケンはニースリーブを着けてマットに戻ってきた。'},
+{sp:'B',en:'Welcome back! How\'s the knee?',jp:'おかえり！膝の調子はどう？'},
+{sp:'A',en:'The doctor cleared me for light training. No leg locks, and no explosive movements for two more weeks.',jp:'医者から軽い練習の許可が出ました。足関節はなし、あと2週間は爆発的な動きも禁止です。'},
+{sp:'B',en:'Perfect. Drill only today, no sparring. Listen to your body.',jp:'完璧だ。今日はドリルだけ、スパーはなし。体の声を聞くんだよ。'},
+{sp:'N',en:'During drilling, Ken tells every partner the same thing.',jp:'ドリル中、ケンはどのパートナーにも同じことを伝える。'},
+{sp:'A',en:'My left knee is recovering, so please go easy on that side. I\'ll tap early to anything near it.',jp:'左膝がリハビリ中なので、そちら側はお手柔らかに。膝周りは何でも早めにタップします。'},
+{sp:'C',en:'No worries at all. Tell me if any position feels wrong.',jp:'全然問題ないよ。嫌な感じのポジションがあったらすぐ言って。'},
+{sp:'N',en:'They drill guard retention — frames, shrimps, knee shields — all controlled, all smooth.',jp:'ガードリテンションをドリルする。フレーム、エビ、ニーシールド。すべてコントロールされ、滑らかに。'},
+{sp:'A',en:'Honestly, the hardest part wasn\'t the knee. It was watching everyone train without me.',jp:'正直、一番つらかったのは膝じゃなくて、みんなの練習を外から見ていることでした。'},
+{sp:'B',en:'Every grappler knows that feeling. Smart rest is part of training — you came back, and that\'s what counts.',jp:'グラップラーなら誰でも知っている感覚だ。賢く休むのも練習のうち。戻ってきたこと、それが何より大事だよ。'},
+{sp:'N',en:'Ken bows off early, ices his knee, and smiles. Step by step.',jp:'ケンは早めに切り上げ、膝を冷やして微笑む。一歩ずつだ。'}]},
+{group:'community',title:'Promotion Day — 昇帯の日',desc:'年内最後のクラスで訪れたサプライズ。ストライプ授与、そして紫帯へ。帯システムと祝福の英語。',speakers:{A:'Ken',B:'Professor',C:'Tom',N:'ナレ'},lines:[
+{sp:'N',en:'The last class of the year. After training, the professor lines everyone up by rank.',jp:'年内最後のクラス。練習後、先生が帯順に全員を整列させる。'},
+{sp:'B',en:'We have a few promotions tonight. First — stripes.',jp:'今夜はいくつか昇格がある。まずはストライプから。'},
+{sp:'N',en:'White belts receive their stripes one by one, each with a handshake and applause.',jp:'白帯たちが一人ずつストライプを受け取る。握手と拍手とともに。'},
+{sp:'B',en:'Tom, two stripes. Your defense has improved every single week.',jp:'トム、ストライプ2本。君のディフェンスは毎週良くなっている。'},
+{sp:'C',en:'Oss! Thank you, Professor!',jp:'オス！ありがとうございます！'},
+{sp:'B',en:'And now... Ken, come up here.',jp:'さて……ケン、前へ。'},
+{sp:'N',en:'The professor holds a purple belt. Ken\'s heart pounds.',jp:'先生の手には紫帯。ケンの心臓が高鳴る。'},
+{sp:'B',en:'Three years of showing up, asking the right questions, and tapping without ego. Position before submission — on and off the mat. Congratulations.',jp:'3年間休まず通い、正しい質問をし、エゴなくタップしてきた。マットの上でも外でも「極めの前にポジション」を体現してきた。おめでとう。'},
+{sp:'A',en:'Oss... thank you, Professor. And thank you, everyone. I got tapped by every single person in this room — that\'s how I got here.',jp:'オス……先生、ありがとうございます。そしてみんなも。この部屋の全員にタップさせられてきました——だからここまで来られたんです。'},
+{sp:'N',en:'Laughter, applause, and a line of fist bumps. Someone shouts: "Purple belt rounds next class!"',jp:'笑いと拍手、そして拳を合わせる列。誰かが叫ぶ。「次のクラスは紫帯ラウンドだ！」'},
+{sp:'B',en:'White to blue, blue to purple, purple to brown, brown to black. The road is long — enjoy every step.',jp:'白から青、青から紫、紫から茶、茶から黒。道は長い——一歩一歩を楽しみなさい。'},
+{sp:'N',en:'Ken ties the new belt. It feels stiff, bright, and full of promise. Tomorrow, he drills again.',jp:'ケンは新しい帯を締める。硬く、鮮やかで、約束に満ちている。明日もまた、ドリルだ。'}]}
 ];
-DATA.push({id:'stories',title:'朗読ストーリー',subtitle:'Listening Stories',desc:'全カテゴリの単語とフレーズを織り込んだ長編ストーリー3本。連続再生・シャッフル再生で聞き流し学習ができます。行をクリックすると個別再生。',type:'story',items:STORIES});
+DATA.push({id:'stories',title:'朗読ストーリー',subtitle:'Listening Stories',desc:'道場編・スパーリング編・試合編・交流編の4カテゴリ×3本、計12本の朗読ストーリー。カテゴリごとの連続再生、全話再生、シャッフル再生に対応。行をクリックすると個別再生。',type:'story',items:STORIES});
 
 // ========================================
 //  APP LOGIC
@@ -1066,13 +1200,8 @@ function renderRefMode(cat){
   return html+`</tbody></table></div>`;
 }
 
-function renderStoryMode(cat){
-  return `<div class="story-all-bar">
-    <button class="story-play" id="story-all-btn" onclick="playAllStories(false)">&#9654; 全話連続再生</button>
-    <button class="story-play secondary" id="story-shuffle-btn" onclick="playAllStories(true)">&#128256; シャッフル再生</button>
-  </div>
-  <div class="story-hint">&#9654; で個別再生、上のボタンで全話を通し・シャッフル再生。各行クリックでその行だけ聞けます。話者ごとに声のトーンが変わります。</div>`+cat.items.map((st,si)=>`
-  <div class="story-card">
+function storyCardHTML(st,si){
+  return `<div class="story-card">
     <div class="story-head">
       <div style="flex:1;min-width:200px"><div class="story-title">${st.title}</div><div class="story-desc">${st.desc}</div></div>
       <button class="story-play" id="story-btn-${si}" onclick="playStory(${si})">&#9654; 朗読スタート</button>
@@ -1083,11 +1212,23 @@ function renderStoryMode(cat){
         <div><div class="story-en">${ln.en}</div><div class="story-jp">${ln.jp}</div></div>
       </div>`).join('')}
     </div>
-  </div>`).join('');
+  </div>`;
+}
+function renderStoryMode(cat){
+  let html=`<div class="story-all-bar">
+    <button class="story-play" id="story-all-btn" onclick="playAllStories(false)">&#9654; 全話連続再生</button>
+    <button class="story-play secondary" id="story-shuffle-btn" onclick="playAllStories(true)">&#128256; シャッフル再生</button>
+  </div>
+  <div class="story-hint">&#9654; で個別再生、カテゴリ見出しの&#9654;でカテゴリ内を連続再生、上のボタンで全12話を通し・シャッフル再生。各行クリックでその行だけ聞けます。</div>`;
+  STORY_GROUPS.forEach(g=>{
+    html+=`<div class="story-group-head"><div><span class="sg-title">${g.title}</span><span class="sg-en">${g.en}</span></div><button class="story-play secondary sg-btn" id="story-group-btn-${g.id}" onclick="playGroupStories('${g.id}')">&#9654; 連続再生</button></div>`;
+    cat.items.forEach((st,si)=>{if(st.group===g.id)html+=storyCardHTML(st,si);});
+  });
+  return html;
 }
 
 // --- Story playback engine ---
-let storyPB={active:null,idx:0,token:0,queue:null,qpos:0};
+let storyPB={active:null,idx:0,token:0,queue:null,qpos:0,qgroup:null};
 // ノベルティ音声（歌う声・かすれ声・ロボット声など）を除外
 const BAD_VOICE=/bad news|good news|bahh|bells|boing|bubbles|cellos|albert|jester|organ|superstar|trinoids|whisper|wobble|zarvox|grandma|grandpa|rocko|shelley|eddy|flo\b|reed|sandy|ralph|kathy|junior|fred|deranged|hysterical|pipe/i;
 const MALE_VOICE=/daniel|aaron|rishi|arthur|gordon|david|mark|guy|oliver|james|\bmale\b/i;
@@ -1131,13 +1272,24 @@ function mkStoryUtter(line){
 }
 function playAllStories(shuffle){
   const ab=document.getElementById('story-all-btn');
-  const wasPlaying=storyPB.queue!==null;
+  const wasAll=storyPB.queue!==null&&storyPB.qgroup===null;
   stopStory();
-  if(wasPlaying&&!shuffle)return;
+  if(wasAll&&!shuffle)return;
   let q=STORIES.map((_,i)=>i);
   if(shuffle){for(let i=q.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));const t=q[i];q[i]=q[j];q[j]=t;}}
-  storyPB.queue=q;storyPB.qpos=0;
+  storyPB.queue=q;storyPB.qpos=0;storyPB.qgroup=null;
   if(ab){ab.innerHTML='&#9632; 停止';ab.classList.add('playing');}
+  startQueued();
+}
+function playGroupStories(gid){
+  const wasThis=storyPB.queue!==null&&storyPB.qgroup===gid;
+  stopStory();
+  if(wasThis)return;
+  const q=[];STORIES.forEach((s,i)=>{if(s.group===gid)q.push(i);});
+  if(!q.length)return;
+  storyPB.queue=q;storyPB.qpos=0;storyPB.qgroup=gid;
+  const b=document.getElementById('story-group-btn-'+gid);
+  if(b){b.innerHTML='&#9632; 停止';b.classList.add('playing');}
   startQueued();
 }
 function startQueued(){
@@ -1146,6 +1298,24 @@ function startQueued(){
   storyPB.active=si;storyPB.idx=0;storyPB.token++;
   const b=document.getElementById('story-btn-'+si);
   if(b){b.innerHTML='&#9632; 停止';b.classList.add('playing');}
+  // 全話再生・シャッフル再生ではカテゴリの切り替わりで英語のパート紹介を挟む
+  const st=STORIES[si];
+  const prev=storyPB.qpos>0?STORIES[storyPB.queue[storyPB.qpos-1]]:null;
+  if(storyPB.qgroup===null&&st.group&&(!prev||prev.group!==st.group)){
+    const gi=STORY_GROUPS.findIndex(x=>x.id===st.group);
+    const g=STORY_GROUPS[gi];
+    const gh=document.getElementById('story-group-btn-'+st.group);
+    if(gh)gh.scrollIntoView({block:'center',behavior:'smooth'});
+    const tok=storyPB.token;
+    const nums=['One','Two','Three','Four','Five','Six'];
+    const u=new SpeechSynthesisUtterance('Part '+(nums[gi]||gi+1)+'. '+g.en+'.');
+    u.lang='en-US';u.rate=0.95;
+    const v=storyVoice('N');if(v)u.voice=v;
+    const go=()=>{if(storyPB.token===tok&&storyPB.active===si)setTimeout(()=>{if(storyPB.token===tok&&storyPB.active===si)storyNext();},500);};
+    u.onend=go;u.onerror=go;
+    window.speechSynthesis.speak(u);
+    return;
+  }
   storyNext();
 }
 function playStory(si){
@@ -1188,8 +1358,9 @@ function stopStory(){
   }
   const ab=document.getElementById('story-all-btn');
   if(ab){ab.innerHTML='&#9654; 全話連続再生';ab.classList.remove('playing');}
+  document.querySelectorAll('.sg-btn').forEach(b=>{b.innerHTML='&#9654; 連続再生';b.classList.remove('playing');});
   document.querySelectorAll('.story-line.now').forEach(e=>e.classList.remove('now'));
-  storyPB.active=null;storyPB.idx=0;storyPB.queue=null;storyPB.qpos=0;
+  storyPB.active=null;storyPB.idx=0;storyPB.queue=null;storyPB.qpos=0;storyPB.qgroup=null;
 }
 function speakStoryLine(si,li){
   stopStory();
