@@ -193,7 +193,7 @@ body{font-family:'Segoe UI','Hiragino Sans',sans-serif;background:var(--bg);colo
   <div class="sidebar"><nav class="nav-list" id="navList"></nav></div>
   <div class="main" id="mainContent"></div>
 </div>
-<div style="text-align:center;padding:8px 0 20px;color:var(--text-dim);font-size:.68rem">BJJ English Guide v10</div>
+<div style="text-align:center;padding:8px 0 20px;color:var(--text-dim);font-size:.68rem">BJJ English Guide v11</div>
 
 <script>
 // ========================================
@@ -1219,7 +1219,7 @@ function renderStoryMode(cat){
     <button class="story-play" id="story-all-btn" onclick="playAllStories(false)">&#9654; 全話連続再生</button>
     <button class="story-play secondary" id="story-shuffle-btn" onclick="playAllStories(true)">&#128256; シャッフル再生</button>
   </div>
-  <div class="story-hint">&#9654; で個別再生、カテゴリ見出しの&#9654;でカテゴリ内を連続再生、上のボタンで全12話を通し・シャッフル再生。各行クリックでその行だけ聞けます。</div>`;
+  <div class="story-hint">&#9654; で個別再生、カテゴリ見出しの&#9654;でカテゴリ内を連続再生、上のボタンで全12話を通し再生。シャッフルは<b>カテゴリ単位</b>（各カテゴリ内の話の順番と会話の流れは崩れません）。各行クリックでその行だけ聞けます。</div>`;
   STORY_GROUPS.forEach(g=>{
     html+=`<div class="story-group-head"><div><span class="sg-title">${g.title}</span><span class="sg-en">${g.en}</span></div><button class="story-play secondary sg-btn" id="story-group-btn-${g.id}" onclick="playGroupStories('${g.id}')">&#9654; 連続再生</button></div>`;
     cat.items.forEach((st,si)=>{if(st.group===g.id)html+=storyCardHTML(st,si);});
@@ -1275,8 +1275,15 @@ function playAllStories(shuffle){
   const wasAll=storyPB.queue!==null&&storyPB.qgroup===null;
   stopStory();
   if(wasAll&&!shuffle)return;
-  let q=STORIES.map((_,i)=>i);
-  if(shuffle){for(let i=q.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));const t=q[i];q[i]=q[j];q[j]=t;}}
+  let q;
+  if(shuffle){
+    // カテゴリ単位でシャッフル: カテゴリの順番のみランダム、各カテゴリ内の話の順番は保持
+    const gids=STORY_GROUPS.map(g=>g.id);
+    for(let i=gids.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));const t=gids[i];gids[i]=gids[j];gids[j]=t;}
+    q=[];gids.forEach(gid=>{STORIES.forEach((s,i)=>{if(s.group===gid)q.push(i);});});
+  }else{
+    q=STORIES.map((_,i)=>i);
+  }
   storyPB.queue=q;storyPB.qpos=0;storyPB.qgroup=null;
   if(ab){ab.innerHTML='&#9632; 停止';ab.classList.add('playing');}
   startQueued();
